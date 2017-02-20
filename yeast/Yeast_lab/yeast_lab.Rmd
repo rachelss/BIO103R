@@ -1,0 +1,114 @@
+---
+title: "Cellular Respiration"
+author: "Bio 103"
+date: "Lab 4"
+output: pdf_document
+fontsize: 12pt 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R Setup
+
+* Make a new R project. If you are using a computer that does not belong to you make this project on your flash drive.
+
+### Change in carbon dioxide concentration
+
+* Input your carbon dioxide concentrations (ppm) at thirty-second intervals as in your lab manual (Table 4-1) using Google Sheets.
+* Download the data as a tsv in your project folder.
+* Load the data into R and view it. Make sure time is a variable not a label - it is the dependent variable.
+```{r, echo=FALSE, warning=FALSE}
+co2 <- read.table('co2_exdata.txt',header = TRUE, sep="\t")
+```
+
+It should look like the following.
+```{r, echo=FALSE, comment=NA}
+co2
+```
+
+* Graph the change in carbon dioxide concentrations. Use tab-complete to make sure you get the names of the variables correct.
+```{r}
+plot(x = co2$Time..minutes.,y = co2$CO2.levels..glucose..ppm.)
+```
+
+* Fix your x and y axis labels
+
+* Fit a line to the data for glucose. Note this line is a model (the lm command stands for linear model). When you fit a model to your data it is in the form y ~ x (or y as a function of x). This function allows you to estimate a value of y for a value of x.
+
+```{r}
+lm(co2$CO2.levels..glucose..ppm. ~ co2$Time..minutes.)
+```
+
+* Save your model to a variable. Note the slope and the intercept. The slope is the respiration rate (ppm / min).
+
+* Calculate the respiration rate for yeast eating lactose.
+
+* Add the lactose data to your graph
+
+```{r, eval=FALSE, warning=FALSE}
+points(x = co2$Time..minutes.,y = co2$CO2.levels..lactose..ppm.)
+```
+
+* Add the lines from both models to the graph. a is the intercept and b is the slope.
+
+```{r, eval=FALSE, warning=FALSE}
+abline(a = -360, b = 1291)
+```
+* You can also plot the line from the model in one step.
+```{r, eval=FALSE, warning=FALSE}
+abline(lm(co2$CO2.levels..glucose..ppm. ~ co2$Time..minutes.))
+```
+
+* Change the colors of the datasets (points and lines) so they are different. You will need to replot each set of points and both lines while adding col="blue" or col="red"
+
+* Add a legend so you know what the lines refer to. In your legend command you must include x,y coordinates, a list of the items to put in the legend, and corresponding list of the color of those items.
+```{r, eval=FALSE, warning=FALSE}
+legend(1,6000,c("glucose", "lactose"), text.col = c("red","blue"))
+```
+
+* Why are there no error bars on this graph?
+
+
+
+* What can you conclude about the respiration rate of yeast?
+
+
+
+### Calculating respiration rates
+
+* Input the class data using Google Sheets. You should have a row for each group; each sugar is entered in a column.
+* Download the data as a tsv in your project folder
+* Load the data into R and view it.
+
+```{r, echo=FALSE, warning=FALSE}
+exdata <- read.table('example_data.txt',header = TRUE, sep="\t", row.names = 1)
+```
+It should look like the following.
+
+```{r, echo=FALSE, comment=NA}
+exdata
+```
+
+* Calculate the mean and standard deviation for the respiration rate of yeast on each sugar.
+
+* Graph the mean respiration rate for yeast on each sugar with error bars equal to 1 standard deviation.
+
+* Why does this graph have error bars?
+
+* Is the respiration rate different for yeast when they eat different food? 
+
+* Try using a boxplot as well and compare how the approaches help you understand your results.
+
+* To save your graphs add the following prior to the lines plotting your graph
+```{r, eval=FALSE, warning=FALSE}
+pdf(file = 'CO2.pdf',width = 5,height = 5)
+```
+* Add the following after the lines plottings your graph
+```{r, eval=FALSE, warning=FALSE}
+dev.off()
+```
+* Rerun the code including these lines and your plots. This will save a pdf of your graph. You may adjust the width and height as needed.
+
+* Save your R script as a reference for the future. Do not copy this text into Word to save it. This will add Word formatting and affect the function of your script.

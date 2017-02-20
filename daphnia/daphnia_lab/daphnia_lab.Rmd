@@ -1,0 +1,62 @@
+---
+title: "Daphnia Lab"
+author: "Bio 103"
+date: "Lab 8"
+output: pdf_document
+fontsize: 12pt 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R Setup
+
+* Make a new R project. If you are using a computer that does not belong to you make this project on your flash drive.
+
+### Enter your data
+
+Your data should look like
+```{r, echo=FALSE, warning=FALSE}
+HB <- read.table('hb_exdata.txt',header = TRUE, sep="\t")
+```
+
+It should look like the following.
+```{r, echo=FALSE, comment=NA}
+HB
+```
+
+### Transform your data
+
+* Calculate heartbeats per minute by multiplying your heart beat counts by 6.
+```{r}
+HBmin <- HB*6 
+```
+* Note this also multiplies the time by 6 so you'll need to copy the original time values to the new table.
+```{r}
+HBmin$Time <- HB$Time 
+```
+
+Calculate average Daphnia HR under each of experimental conditions and the control (ambient).
+
+Graph average Daphnia HR under each of experimental conditions and the control (ambient). Include an informative caption below the graph, and axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
+
+Present your three experimental data sets all on one graph axis, or each experiment on its own axis.  
+Plot your independent variable (time) on 
+x-axis and dependent (heart beats per minute) on y-axis. 
+Identify when the chemical or cold was removed. 
+Be sure to include:
+1) an informative caption below the graph, 2) axis labels with units, and 
+3)a legend (if needed).
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
