@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Input your carbon dioxide concentrations (ppm) at thirty-second intervals as in your lab manual (Table 4-1) using Google Sheets.
 * Download the data as a tsv in your project folder.
-* Load the data into R and view it. Make sure time is a variable not a label - it is the dependent variable.
+* Load the data into R and view it. Make sure time is a variable not a label - it is the dependent variable in your analyses. Remember that in the first lab you set `row.names = 1` to make the first column a label. Do not do that in this case.
 ```{r, echo=FALSE, warning=FALSE}
 co2 <- read.table('co2_exdata.txt',header = TRUE, sep="\t")
 ```
@@ -41,7 +41,7 @@ plot(x = co2$Time..minutes.,y = co2$CO2.levels..glucose..ppm.)
 lm(co2$CO2.levels..glucose..ppm. ~ co2$Time..minutes.)
 ```
 
-* Save your model to a variable. Note the slope and the intercept. The slope is the respiration rate (ppm / min).
+* Save your model to a variable so you can use this information later. Saving to a variable is done the same way as when you loaded data and saved it to a variable. Note the slope and the intercept. The slope is the respiration rate (ppm / min).
 
 * Calculate the respiration rate for yeast eating lactose.
 
