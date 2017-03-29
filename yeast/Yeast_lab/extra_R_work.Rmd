@@ -52,7 +52,10 @@ Hopefully you can guess that if you fit a model to the data it won't fit very we
 * Filter out just the data for the United States using the following.
 
 ```{r}
-US <- pops[pops$country == "United States",]
+library(dplyr)
+US <- filter(pops, country == "United States")
+
+#US <- pops[pops$country == "United States",]
 ```
 
 This command assigns to the variable `US`, the rows from pops where the country column of pops is equal to United States, for all columns (that's why it's blank after the comma). Don't worry about how to do this filtering step if you find it confusing. 
@@ -60,7 +63,7 @@ This command assigns to the variable `US`, the rows from pops where the country 
 * Plot the change in the US population over time.
 
 * Fit a model to the US data (pop as a function of year) and plot this line.
-```{r, eval=FALSE, warning=FALSE}
+```{r, include=FALSE, warning=FALSE}
 plot(US$year,US$pop)
 abline(lm(US$pop~US$year))
 ```
