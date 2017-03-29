@@ -1,0 +1,70 @@
+---
+title: "R Practice"
+author: "Bio 103"
+output: pdf_document
+fontsize: 12pt 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### About this assignment
+
+This assignment is a chance for you to practice data analysis skills in R a bit more. Because the goal is for you to learn data analysis, if you demonstrate your learning here we won't care whether you didn't demonstrate learning earlier. Thus, the grade on this assignment can replace the grade on a previous data analysis assignment. Make sure to learn this material before the next data analysis assignment so that one will be easy and you will do well on it too.
+
+### R Setup
+
+* Make a new R project. If you are using a computer that does not belong to you make this project on your flash drive.
+
+### Load your data
+
+* You will be working with data on populations from different countries around the world. Check out http://www.gapminder.org/ for information.
+
+* You will work with a file called population_data.tsv
+
+```{r, include = FALSE}
+library(curl)
+library(plyr)
+
+gapminder_location<-curl(url = "http://tinyurl.com/qb83k3z")
+gapminder<-read.csv(gapminder_location)
+write.table(gapminder, file = 'population_data.tsv', sep='\t')
+```
+
+Your data should look like the following (except a lot more)
+```{r, echo=FALSE, warning=FALSE}
+pops <- read.table('population_data.tsv',header = TRUE, sep="\t")
+head(pops)
+```
+
+* I named the variable holding my data "pops". You can name yours anything that is informative to you about the data. Click on the variable name to see the dataset. You should have a population size for each country for each year (along with some other information)
+
+### Plot your data
+
+* Graph the change in population size for each country over time (hint: the population size is dependent on the year).
+```{r, include = FALSE}
+plot(x = pops$year, y = pops$pop)
+```
+
+Hopefully you can guess that if you fit a model to the data it won't fit very well. 
+
+* Filter out just the data for the United States using the following.
+
+```{r}
+US <- pops[pops$country == "United States",]
+```
+
+This command assigns to the variable `US`, the rows from pops where the country column of pops is equal to United States, for all columns (that's why it's blank after the comma). Don't worry about how to do this filtering step if you find it confusing. 
+
+* Plot the change in the US population over time.
+
+* Fit a model to the US data (pop as a function of year) and plot this line.
+```{r, eval=FALSE, warning=FALSE}
+plot(US$year,US$pop)
+abline(lm(US$pop~US$year))
+```
+
+* Fix your x and y axis labels
+
+* Save your plot as a pdf and save your R script
