@@ -9,7 +9,7 @@ fontsize: 12pt
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### About this assignment
+### About this assignment--- LINDA TRIES
 
 This assignment is a chance for you to practice data analysis skills in R a bit more. Because the goal is for you to learn data analysis, if you demonstrate your learning here we won't care whether you didn't demonstrate learning earlier. Thus, the grade on this assignment can replace the grade on a previous data analysis assignment. Make sure to learn this material before the next data analysis assignment so that one will be easy and you will do well on it too.
 
