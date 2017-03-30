@@ -9,7 +9,7 @@ fontsize: 12pt
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### About this assignment--- LINDA TRIES
+### About this assignment
 
 This assignment is a chance for you to practice data analysis skills in R a bit more. Because the goal is for you to learn data analysis, if you demonstrate your learning here we won't care whether you didn't demonstrate learning earlier. Thus, the grade on this assignment can replace the grade on a previous data analysis assignment. Make sure to learn this material before the next data analysis assignment so that one will be easy and you will do well on it too.
 
@@ -47,18 +47,16 @@ head(pops)
 plot(x = pops$year, y = pops$pop)
 ```
 
-Hopefully you can guess that if you fit a model to the data it won't fit very well. 
+Hopefully you can guess (based on your plot) that if you fit a model to the data it won't fit very well. But maybe that's because there's so much variation between countries.  There might be a pattern for each country individually.
 
 * Filter out just the data for the United States using the following.
 
-```{r}
-library(dplyr)
+```{r, message=FALSE}
+library(dplyr)  # don't forget to install.packages(dplyr) first
 US <- filter(pops, country == "United States")
-
-#US <- pops[pops$country == "United States",]
 ```
 
-This command assigns to the variable `US`, the rows from pops where the country column of pops is equal to United States, for all columns (that's why it's blank after the comma). Don't worry about how to do this filtering step if you find it confusing. 
+This command assigns to the variable `US`, every row of data from `pops` where the country column is equal to "United States". 
 
 * Plot the change in the US population over time.
 
@@ -71,3 +69,5 @@ abline(lm(US$pop~US$year))
 * Fix your x and y axis labels
 
 * Save your plot as a pdf and save your R script
+
+* Repeat the previous analysis for another country to determine whether there is a pattern for each country even if this pattern is obscured when an analysis is done across all countries (if you are working with a friend make sure you pick a different country so we know you are doing your own work).
