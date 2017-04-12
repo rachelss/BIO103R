@@ -1,7 +1,6 @@
 ---
 title: "Daphnia Lab"
 author: "Bio 103"
-date: "Lab 8"
 output: pdf_document
 fontsize: 12pt 
 ---
@@ -18,45 +17,56 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Your data should look like
 ```{r, echo=FALSE, warning=FALSE}
-HB <- read.table('hb_exdata.txt',header = TRUE, sep="\t")
+HB_Linda_data <- read.table('hb_exdata.tsv',header = TRUE, sep="\t")
 ```
 
 It should look like the following.
 ```{r, echo=FALSE, comment=NA}
-HB
+HB_Linda_data
 ```
 
 ### Transform your data
 
-* Calculate heartbeats per minute by multiplying your heart beat counts by 6.
+* Calculate heartbeats per minute by multiplying your heart beat counts by 6. Assign this to a new column (column name comes after $) in your data table.
 ```{r}
-HBmin <- HB*6 
+HB_Linda_data$HeartRate_min<-6*HB_Linda_data$HeartRate.count.10sec.
 ```
-* Note this also multiplies the time by 6 so you'll need to copy the original time values to the new table.
+
+Compare Daphnia HR per minute under the experimental condition and the control (ambient) using a boxplot. The boxplot function takes some observation as a function of a treament, for a given dataset.
+
 ```{r}
-HBmin$Time <- HB$Time 
+boxplot(HeartRate_min ~ Ice, data = HB_Linda_data)
 ```
 
-Calculate average Daphnia HR under each of experimental conditions and the control (ambient).
+* What does this tell you about the effect of the treatment on heart rate?
+* Is there a difference between treatment and not?
+* What could be obscuring a treatment effect?
 
-Graph average Daphnia HR under each of experimental conditions and the control (ambient). Include an informative caption below the graph, and axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
+You might have noticed it took some time for your Daphnia's heartrate to stabilize under the treatment condition (or when you removed the treatment). 
 
-Present your three experimental data sets all on one graph axis, or each experiment on its own axis.  
-Plot your independent variable (time) on 
-x-axis and dependent (heart beats per minute) on y-axis. 
-Identify when the chemical or cold was removed. 
-Be sure to include:
-1) an informative caption below the graph, 2) axis labels with units, and 
-3)a legend (if needed).
+* Graph the change in heartrate over time to determine the "real" heartrate given the treatment.
 
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+plot(HB_Linda_data$Time.min.,HB_Linda_data$HeartRate_min)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+* Based on this plot decide at which times the heartrate is fully affected by the treatment. Calculate the mean heartrate for this subset of the data (note the row numbers for these times). You will be able to extract the subset of the data (for example rows 6-12 (i.e. 3 - 6 minutes) using the following:
+
+`my_data_frame[6:12]`
+
+* Repeat for all treatments
+
+* Include axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
+
+* Put the data from all the treatments into a new data frame so you can plot it.
+
+```{r }
+sub_results <-data.frame(HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12])
+colnames(sub_results) <- c('Ambient','Ice','Ethanol','Caffeine')
+
+boxplot(sub_results)
+```
+
+* Include axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
+
+* Save your plots as pdf files using the pdf function (not the export button).
