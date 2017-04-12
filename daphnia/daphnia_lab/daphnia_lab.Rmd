@@ -15,24 +15,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Enter your data
 
-Your data should look like
+* Use google sheets to enter your data.
+* You should have four sheets - one for ambient, and one for each treatment.
+* Save each sheet in the folder containing your R project.
+* Load your data into R.
+
+Your data *for each dataset* should look like the following. Make sure each dataset has its own variable name.
 ```{r, echo=FALSE, warning=FALSE}
 HB_Linda_data <- read.table('hb_exdata.tsv',header = TRUE, sep="\t")
-```
-
-It should look like the following.
-```{r, echo=FALSE, comment=NA}
 HB_Linda_data
 ```
 
 ### Transform your data
 
-* Calculate heartbeats per minute by multiplying your heart beat counts by 6. Assign this to a new column (column name comes after $) in your data table.
+* *For each dataset* calculate heartbeats per minute by multiplying your heart beat counts by 6. Assign this to a new column (column name comes after $) in your data table.
 ```{r}
 HB_Linda_data$HeartRate_min<-6*HB_Linda_data$HeartRate.count.10sec.
 ```
 
-Compare Daphnia HR per minute under the experimental condition and the control (ambient) using a boxplot. The boxplot function takes some observation as a function of a treament, for a given dataset.
+*Using just the Ice treatment data* compare Daphnia HR per minute for the time the Daphnia was on ice to the time it was not on ice. The boxplot function takes some observation as a function of a treament, for a given dataset.
 
 ```{r}
 boxplot(HeartRate_min ~ Ice, data = HB_Linda_data)
@@ -50,22 +51,34 @@ You might have noticed it took some time for your Daphnia's heartrate to stabili
 plot(HB_Linda_data$Time.min.,HB_Linda_data$HeartRate_min)
 ```
 
-* Based on this plot decide at which times the heartrate is fully affected by the treatment. Calculate the mean heartrate for this subset of the data (note the row numbers for these times). You will be able to extract the subset of the data (for example rows 6-12 (i.e. 3 - 6 minutes) using the following:
+* Based on this plot decide at which times the heartrate is fully affected by the treatment. Calculate the mean heartrate for this subset of the data (note the row numbers for these times). You will be able to extract the subset of the data (for example rows 3-12 (i.e. 1.5 - 6 minutes) using the following. Note you might not want to use this this same subset of data.
 
-`my_data_frame[6:12]`
+`my_data_frame[3:12]`
 
 * Repeat for all treatments
 
 * Include axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
 
-* Put the data from all the treatments into a new data frame so you can plot it.
+* Put the data from all the treatments into a new data frame so you can plot it using a boxplot.
+
+```{r, echo = FALSE}
+HB_Linda_data_Caff <- HB_Linda_data*4
+HB_Linda_data_Amb <- HB_Linda_data*2
+HB_Linda_data_Eth <- HB_Linda_data
+```
 
 ```{r }
-sub_results <-data.frame(HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12],HB_Linda_data$HeartRate_min[6:12])
+sub_results <-data.frame(HB_Linda_data_Amb$HeartRate_min[3:12],
+                    HB_Linda_data$HeartRate_min[3:12],
+                    HB_Linda_data_Eth$HeartRate_min[3:12],
+                    HB_Linda_data_Caff$HeartRate_min[3:12])
 colnames(sub_results) <- c('Ambient','Ice','Ethanol','Caffeine')
+```
 
+```{r, echo = FALSE}
 boxplot(sub_results)
 ```
+
 
 * Include axis labels with units. Be sure your units are correct; present your data in a standardized format using beats per minute (BPM).
 
