@@ -1,6 +1,6 @@
 ---
-title: "Algae Phylogeny"
-author: "Rachel Schwartz"
+title: "Using R in field sampling"
+author: "Rachel Schwartz the great"
 date: "May 24, 2017"
 output: pdf_document
 ---
