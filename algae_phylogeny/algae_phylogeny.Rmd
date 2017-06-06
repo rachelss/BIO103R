@@ -1,6 +1,6 @@
 ---
-title: "Comparing Field Sites"
-output:
+title: "Using R in field sampling"
+author: "Linda Forrester"
   html_document: default
   pdf_document: default
 ---
