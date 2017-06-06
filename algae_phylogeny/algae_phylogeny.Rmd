@@ -9,9 +9,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-###The R Software
+### The R Software
 
-If you are using your own computer you will need the software R and the friendly user interface RStudio if you do not have them already. First download R from https://cran.r-project.org/ then click on the file to install it. The download RStudio from https://www.rstudio.com/products/rstudio/download3/ and install it.
+See other instructions for accessing R via the web or downloading to your computer.
 
 Open RStudio and make a new project. Select File - New Project then New Directory and Empty Project and give it a name. You now have four windows open: a script to help you keep track of the commands you are entering, a console where those commands are run, an environment that show what data you have, and a file window.
 
@@ -20,6 +20,7 @@ Open RStudio and make a new project. Select File - New Project then New Director
 Last week you calculated the diversity index for each plot within each of four site types. This allows you to understand the variation in diversity among site types.
 
 * Load class data for the diversity of each plot by pulling from google sheets.
+  * if you are using your personal computer you must install the necessary package first by typing install.packages('gsheet')
   * assign the web address of the data to a variable
   * assign the data itself to a variable (in this case we named it `diversitydata`)
   * `gsheet2tbl` is a command that gets the data from the website so that you can access it in RStudio
@@ -31,7 +32,26 @@ diversitydata <- gsheet2tbl(url)
 ```
 
 * run these lines using the run button above
+* you will need to run each line separately
+* the line was run correctly if you get the prompt (`>`) in the console window at the bottom of RStudio
 * view your data by clicking on the item in the Data window on the right side (mine is called `diversitydata` - yours may be named something else) - this will open a new tab above so you can look at the data
+
+## Keep track of what your commands d
+
+As you work you are typing commands that you probably won't remember next week. Add comments about your commands using the `#` symbol. For example, rather than the plain code above your script might look like the following:
+
+```{r gsheet2, eval=FALSE}
+#load the package that allows use to access google sheets
+library(gsheet)
+
+#assign the website address for the data to a variable
+url<-'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
+
+#load the data from google sheets
+diversitydata <- gsheet2tbl(url)
+```
+
+**Add comments to your script as you enter the commands below**
 
 ## Plot results
 
