@@ -1,6 +1,6 @@
 ---
 title: "Using R in field sampling"
-author: "Rachel Schwartz the great"
+author: "Linda Forrester"
 date: "May 24, 2017"
 output: pdf_document
 ---
