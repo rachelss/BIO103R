@@ -21,7 +21,8 @@ Open RStudio and make a new project. Select File - New Project then New Director
 
 Last week you calculated the diversity index for each plot within each of four site types. This allows you to understand the variation in diversity among site types.
 
-* Load class data for the diversity of each plot by getting it into R directly from google sheets.
+
+* Get class data for the diversity of each plot into R directly from google sheets.
   * if you are using your personal computer you must install the necessary package first by typing install.packages('gsheet')
   * assign the web address of the data to a variable
   * assign the data itself to a variable (in this case we named it `diversitydata`)
