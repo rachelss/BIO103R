@@ -1,8 +1,7 @@
 ---
 title: "Using R in field sampling"
 author: "Linda Forrester"
-  html_document: default
-  pdf_document: default
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +17,7 @@ See [instructions](Rsetup.html) for accessing R via the web or downloading to yo
 
 Open RStudio and make a new project. Select File - New Project then New Directory and Empty Project and give it a name. You now have four windows open: a script to help you keep track of the commands you are entering, a console where those commands are run, an environment that show what data you have, and a file window.
 
-## Load data
+## Get your data into R so you can use it
 
 Last week you calculated the diversity index for each plot within each of four site types. This allows you to understand the variation in diversity among site types.
 
