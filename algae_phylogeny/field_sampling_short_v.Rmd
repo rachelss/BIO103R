@@ -177,7 +177,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_boxplot()+
   scale_x_discrete(limits=c("SuM", "ShM", "SuNM", "ShNM"), 
                    labels=c("SuM" = "Sun Mow", "ShM" = "Shade Mow",
-                              "SuNM" = "Sun Not Mow", "ShNM" = "Shade No Mow"),
+                              "SuNM" = "Sun Not Mow", "ShNM" = "Shade No Mow"), 
                    name ="Conditions at site")
 
 ```
@@ -191,8 +191,7 @@ SunnyOnly <- subset(diversitydata,SiteType=="SuNM" | SiteType=="SuM")
 ggplot(SunnyOnly, aes(x=SiteType, y=Diversity)) +
   geom_boxplot()+
   scale_x_discrete(limits=c("SuM", "SuNM"),
-                   labels=c("SuM" = "Sun Mow", "SuNM" = "Sun No Mow", 
-                            name ="Conditions at site"))
+                   labels=c("SuM" = "Sun Mow", "SuNM" = "Sun No Mow"), name ="Conditions at site")
 ```
 
 
