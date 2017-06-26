@@ -101,7 +101,7 @@ diversitydata <- gsheet2tbl(url)
 
 To compare the diversity values among site types we need to plot the values for each site type.
 
-* load the library that allows us to the plotting commands (copy, paste and run lines in grey boxes. Include "# comments".)
+* load the library that allows us to the plotting commands (copy, paste and run lines in grey boxes. Include "# comments".)  (***Remember:  Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want.***) Make a package accessible to your R script by typing library(packageName).
 
 ```{r loadlibrary}
 library(ggplot2)
@@ -191,7 +191,8 @@ SunnyOnly <- subset(diversitydata,SiteType=="SuNM" | SiteType=="SuM")
 ggplot(SunnyOnly, aes(x=SiteType, y=Diversity)) +
   geom_boxplot()+
   scale_x_discrete(limits=c("SuM", "SuNM"),
-                   labels=c("SuM" = "Sun Mow", "SuNM" = "Sun No Mow"), name ="Conditions at site")
+                   labels=c("SuM" = "Sun Mow", "SuNM" = "Sun No Mow"), 
+                   name ="Conditions at site")
 ```
 
 
