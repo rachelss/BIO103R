@@ -28,7 +28,7 @@ Log in to the R Studio server at https://celsrs.uri.edu/ . This will enable you 
 You will get your login information from your TA. Your password is the same as username.
 
 If you would like to use RStudio on your personal computer see
-[instructions](../Rsetup.html).
+[instructions](Rsetup.html).
 
 **Open RStudio and make a new project.**
 
