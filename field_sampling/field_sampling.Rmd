@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 You will be using **R** for data analysis this semester. Here are some great reasons to use **R**:
 
-* You write down the instructions (code) to do you data analysis so you will remember how it's done
+* You write down the instructions (code) to do your data analysis so you will remember how it's done
 * Instantly rerun your analysis
 * Make beautiful plots
 * Analyze your data in every possible way
@@ -34,13 +34,13 @@ If you would like to use RStudio on your personal computer see
 **Open RStudio and make a new project.**
 
 * Select from top left corner:  
-  + `File` - `New Project...`
-  + `New Directory` and `Empty Project` 
-  + `Directory name:  FieldSampling`
-  + Leave the Subdirectory as the default:  ~
+    + `File` - `New Project...`
+    + `New Directory` and `Empty Project` 
+    + `Directory name:  FieldSampling`
+    + Leave the Subdirectory as the default:  ~
                                   
 * Select from top left corner:  
-  + `File` - `New File` - `R Script`
+    + `File` - `New File` - `R Script`
   
 Making a new project and script will give you four windows open in R: 
 a *script* to help you keep track of the commands you are entering, 
@@ -52,23 +52,29 @@ a *file* window.
 ## How to get your data into R so you can use it
 
 Last week you calculated the diversity index for each plot within each of four site types. A diversity index allows you to understand the variation in diversity among site types.
-The following lines of code will allow you to get your data (the class data about the diversity of each plot) into R directly from google sheets.
+The following lines of code will allow you to get your data (the class data about the diversity of each plot) into R directly from Google Sheets.
 
-**Type the code (from the grey boxes below) into the SCRIPT window of RStudio. Run each lines using the [Run button](RStudioRun.png) (top left of the SCRIPT window in RStudio)**
+**Type the code (from the grey boxes below) into the SCRIPT window of RStudio. Run each line using the [Run button](RStudioRun.png) (top left of the SCRIPT window in RStudio)**
   
-* *First you must make a necessary "package" accessible to R.* Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want. 
+### Make the tools you need available in R.
+
+Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want. 
   
 ```{r }
 library(gsheet)
 ```
 
-* *Next you need to tell `R` where to get your data.* Assign the web address of the data (the "https" address) to a variable (here our variable is called "url" = "uniform resource locator" = an address on the web). You assign a number or word or data to a variable using `<-` (which makes something that looks like an arrow). The variable name goes on the left of the arrow and the information goes on the right. 
+### Tell R where to get your data.
+
+Assign the web address of the data (the "https" address) to a variable (here our variable is called "url" for "uniform resource locator". This is the term for an address on the web (you can name your variable anything though). You assign a number or word or data to a variable using `<-` (which makes something that looks like an arrow). The variable name goes on the left of the arrow and the information goes on the right. 
 
 ```{r }
-url<-'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
+url <- 'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
 ```
 
-* *Assign the data itself to a variable*. In this case the data is contained in the variable `diversitydata`. The function `gsheet2tbl` gets the data from the website so that you can access it in R.
+### Assign the data to a variable
+
+In this case the data is contained in the variable `diversitydata`. The function `gsheet2tbl` gets the data from the website so that you can access it in R.
 
 ```{r gsheet}
 diversitydata <- gsheet2tbl(url)
@@ -101,25 +107,25 @@ diversitydata <- gsheet2tbl(url)
 
 To compare the diversity values among site types we need to plot the values for each site type.
 
-* Load the library that allows us to create plots
+### Load the library that allows us to create plots
 
 ```{r loadlibrary}
 library(ggplot2)
 ```
 
-### Second, create the base layer of your plot 
+### Create the base layer of your plot 
 
 * use the command `ggplot`
-* enter the name of the variable containing your data
-* `aes` specifies the "aesthetics" of the plot (i.e. how it looks), including the x and y variables
-* specify the variable names based on viewing the data
+    + enter the name of the variable containing your data
+    + `aes` specifies the "aesthetics" of the plot (i.e. how it looks), including the x and y variables
+    + specify the variable names based on viewing the data
 * run this plot command
 
 ```{r }
 ggplot(diversitydata, aes(x=SiteType,y=Diversity))
 ```
 
-### Third, add data points to your plot
+### Add data points to your plot
 
 * now that you have set up your plot add your points using `geom_point()`
 * put a `+` between the `ggplot` command and `geom_point()`
@@ -129,7 +135,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_point()
 ```
 
-### Fourth, add a boxplot on top of your plot
+### Add a boxplot on top of your plot
 
 * a boxplot summarizes your data by plotting 
     + the median (middle) value as a horizontal line
@@ -154,7 +160,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 Save your script by clicking `File - Save`.  Your work will save to the server that we are using for this lab.  You will be able to access your work on this server from other computers, as long as you know the web address and your username and password.
 
 
-### Optional:  Reorder data on the X-axis
+### Reorder data on the X-axis
 
 If you want to make particular comparisons, such as between mowed sites, you might want to have your data in a particular order.
 
