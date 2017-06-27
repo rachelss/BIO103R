@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Starting with the R Software
 
 You will be using **R** for data analysis this semester. Here are some great reasons to use **R**:
+
 * You write down the instructions (code) to do you data analysis so you will remember how it's done
 * Instantly rerun your analysis
 * Make beautiful plots
