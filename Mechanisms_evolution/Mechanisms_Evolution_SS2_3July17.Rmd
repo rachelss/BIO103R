@@ -175,7 +175,7 @@ ggplot(snail_data_means_ex2,
 
 Remember to check the scale of your plots. In many cases, your Oystercatcher data will have a much larger y axis than your driftwood experiment. Why do you think this is?
 
-## 5. Performing a T-test in R
+## 5. Compare number of snails in different groups
 
 Now that we have produced graphs that allow us to visualize our data, we are interested in knowing if the data between the two experiments is statistically different by the third generation. To do this, you'll run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set. 
 
