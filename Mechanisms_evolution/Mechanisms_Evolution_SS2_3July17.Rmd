@@ -131,7 +131,7 @@ ggplot(snail_data_means_ex1,
        aes(x=generation, y=mean, color=snailcolor)) 
 ```
 
-Notice the addition of 'color' to aes. This gives your two lines different colors to easily differentiate between them. 
+Notice the addition of `color` to aes. The `color` variable separates the data by each value of `snailcolor` and then plots these separately on the same graph. 
 
 ###Second add the line and points to your plot 
 
