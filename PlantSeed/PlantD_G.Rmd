@@ -1,0 +1,164 @@
+---
+title: 'Lab 5: Plant Differentiation and Growth'
+output:
+  pdf_document: default
+  word_document: default
+---
+## Pre-Setup
+
+Before we begin to use R today, calculate the average of your light and dark seedlings at each interval (2 days, 4 days, and 6 days) using Google Sheets. Once you have these numbers, load them into the class data sheet (your TA will provide this). This data sheet is what you'll use during this lab.
+
+## 1. Load Data Into R
+
+We will use a similar procedure as the last lab to load data into R so that we can work with it.
+
+* Make a new project in a new folder and open a new script.
+* Load libraries you will need: `ggplot2`, `gsheet`, and  `dplyr`
+
+For this lab we will provide you with the directions of what to do by showing you the comments you should enter in you R script.
+
+* Copy the comment lines into your script
+* Enter the necessary code based on the previous lab. In any case where you have not seen the necessary code before, it is provided.
+
+```{r load1}
+# Load the libraries ggplot2, gsheet, and dyplyr. 
+```
+
+```{r load2, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(gsheet)
+library(dplyr)
+```
+
+Next, load in the data. Today's data is found at:
+
+https://docs.google.com/spreadsheets/d/1MOkh3SNsuuTixjRFi4ptYmjimUJ9rGXIta1iJDjre9k
+
+```{r load3}
+# Assign website address for the data to a variable
+```
+
+```{r load4, echo=FALSE}
+url <- 'https://docs.google.com/spreadsheets/d/1MOkh3SNsuuTixjRFi4ptYmjimUJ9rGXIta1iJDjre9k'
+```
+
+```{r }
+# Load the data from google sheets
+```
+
+```{r load5, echo=FALSE}
+plant_data <- gsheet2tbl(url)
+```
+
+Remember, once we have our data in, it is always good to check to make sure the data was imported correctly. Use `head` to check your imported data. 
+
+```{r head, eval=FALSE}
+# Check your data looks right (first lines only)
+head(plant_data)
+```
+## 2. Find The Average Height for Each Group of Seedlings
+
+We are interested in comparing the growth rate of seedlings in light and dark conditions. We will do this in a very similar way to what we did last class with the function `group_by` in the package `dplyr`. 
+ 
+```{r gb1}
+# Group data by exposure and day
+```
+
+```{r gb, echo=FALSE}
+grouped_plant_data <- group_by(plant_data, exposure, day)
+```
+
+Next we calculate the mean for each group.  
+
+```{r sm}
+# Calculate the mean height of the seedlings at each interval
+
+plant_data_means <- summarise(grouped_plant_data,
+                              mean = mean(height, na.rm=TRUE))
+```
+
+This code is just like you used last time, with the addition of `na.rm=TRUE`. This additional code tells R to ignore areas in the data set that had no values entered. For example, if no seedlings grew under your dark condition, you would not record any data under height for that experiment. By using this code, R can now ignore these blank spaces and calculate the mean correctly. 
+
+Check the first few lines of your data using `head`
+
+```{r h, echo=FALSE, eval=FALSE}
+head(plant_data_means)
+```
+
+## 4. Graphing the seedling Data
+
+Just like last time, we are going to use `ggplot` to graph the data. Because we want to compare the seedlings grown under light and dark conditions, we are going to graph both sets of data together. 
+
+### First create the base layer of your plot
+
+* What is the independent variable (x axis)?
+* What is the dependent variable (y axis)?
+* How will you plot light and dark conditions separately?
+
+```{r plot1, echo=FALSE}
+# Make the base layer of your plot
+ggplot(plant_data_means, aes(x=day, y=mean, color=exposure))
+```
+
+### Second, add the data to the plot (using `geom_point`)
+
+```{r plot2, echo=FALSE}
+# Add the data to your plot
+ggplot(plant_data_means, aes(x=day, y=mean, color=exposure))+
+  geom_point()
+```
+
+### Third add standard deviation bars to your plot
+
+* It appears that there are differences in seedling heights between the two different growing conditions. However, if there is a lot of variation in our data those differences may not be significant (remember the t-test from last lab). 
+
+* The *standard deviation* is how much the individual data points differ from the overall mean. This puts a single value on how much variation there is in the data. For example, if we saw seedling heights of 3, 2.9, 3, and 3.1, we would have a small standard deviation. However, if we had seedling heights of 0.5, 5.5, 2, and 4, the standard deviation would be high. 
+
+* Standard deviation is calculated in R using the function `sd`.
+
+```{r sm2}
+# Remake your table of means so it includes std deviation
+plant_data_means <- summarise(grouped_plant_data,
+                              mean = mean(height, na.rm=TRUE), 
+                              stdev = sd(height,na.rm=TRUE))
+```
+
+Next add the standard deviation bars to your graphs by adding a layer using `geom_errorbar`
+
+```{r sd, eval=FALSE}
+# Add the following layer to your plot
+  geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))
+```
+
+
+```{r plot0, echo=FALSE}
+# Add the bars to your plot
+ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
+  geom_point()+
+  geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))
+```
+
+### Fourth, add labels to your graph
+Just like last class, you'll want to clean up your graph and make it look professional.
+
+* To label the axes make a new layer using `labs(x="", y="", color="")`. Enter labels for the x axis, y axis, and legend in the quotes.
+
+* Optional: to change the error bars add and set the parameter `width` to `geom_errorbar`.
+
+```{r}
+#Label your plot and change axes titles
+```
+
+```{r plot5, echo=FALSE}
+# Add the bars to your plot
+ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
+  geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev, width=.2))+
+  geom_point()+
+  labs(x="Day", y="Mean height (cm)", color="Exposure")
+```
+
+## Answer the following questions
+
+* Under which condition did the seedlings grow better? Light or dark? 
+
+* What do your standard deviation bars look like? What does it mean to have a large standard deviation bar? 
