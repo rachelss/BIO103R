@@ -4,9 +4,20 @@ output:
   pdf_document: default
   word_document: default
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
+```
+
 ## Pre-Setup
 
-Before we begin to use R today, calculate the average of your light and dark seedlings at each interval (2 days, 4 days, and 6 days) using Google Sheets. Once you have these numbers, load them into the class data sheet (your TA will provide this). This data sheet is what you'll use during this lab.
+Before we begin to use R today, calculate the average height of your light and dark seedlings at each interval (2 days, 4 days, and 6 days) using Google Sheets. 
+
+By calculating the average of each data point you are getting a pretty good estimate of your sample. This minimizes the error in your estimate of the height of your seedlings (i.e. measurement error). However, it means you only have one height estimate per treatment/day.
+
+Once you have an estimate for your sample, enter this into the class data sheet (your TA will provide this). This data sheet is what you'll use during this lab.
+
+Now you have good estimates of multiple samples to work with. There will be some variation among samples due to the soil, the location the plants were grown, and how different people measured height. Having multiple samples allows you to estimate a mean height despite all this variation.
 
 ## 1. Load Data Into R
 
@@ -17,8 +28,9 @@ We will use a similar procedure as the last lab to load data into R so that we c
 
 For this lab we will provide you with the directions of what to do by showing you the comments you should enter in you R script.
 
-* Copy the comment lines into your script
+* Copy the comment lines into your script.
 * Enter the necessary code based on the previous lab. In any case where you have not seen the necessary code before, it is provided.
+* Answer questions in this assignment using additional comments.
 
 ```{r load1}
 # Load the libraries ggplot2, gsheet, and dplyr. 
@@ -177,7 +189,7 @@ Just like last class, you'll want to clean up your graph and make it look profes
 
 * To label the axes make a new layer using `labs(x="", y="", color="")`. Enter labels for the x axis, y axis, and legend in the quotes.
 
-* Last, its good to clean up your graph. As you can see, those error bars are a little messy. Try changing their width to make them more professional looking. 
+* Last, its good to clean up your graph. As you can see, those error bars are a little messy. Try changing their width to make them more professional looking by adding `width = 0.2` after `ymax` in your error bar layer. 
 
 ```{r}
 #Label your plot and change axes titles
@@ -193,11 +205,12 @@ ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
 
 ## Answer the following questions
 
-* Under which condition did the seedlings grow better? Light or dark? 
+* Under which condition did the seedlings grow better? Light or dark?
+* How confident do you feel? More or less than when you plotted all the data?
 
-## 4. Perform a t-test 
+## 4. Compare height under different conditions using statistics (a t-test)
 
-Just like in the Mechanisms of Evolution lab, we now have data in which we want to see if there is a statistcal difference between two groups. In this case, were interested to see if there is a difference between seedling heights in the 2 day old, 4 day old, and 6 day old seedlings. Lets walk through how to do a t-test for the 2 day old seedlings. 
+Just like in the Mechanisms of Evolution lab, we now have data for which we want to see if there is a statistical difference between two groups. In this case, we're interested in whether there is a difference between seedling heights in the 2 day old, 4 day old, and 6 day old seedlings. Let's walk through how to do a t-test for the 2 day old seedlings. 
 
 * Filter light and dark grown seedlings for the day 2 time period.  
  
@@ -207,20 +220,45 @@ Just like in the Mechanisms of Evolution lab, we now have data in which we want 
  Dark2Day <- filter(plant_data, exposure=="dark" & day=="2")
  ```
  
- **What is your null hypothesis for the 2 day old seedling data?**
+ * What is your null hypothesis for the 2 day old seedling data?
  
- ```{r, echo=FALSE, eval=FALSE}
+```{r, echo=FALSE}
+# t test to compare height at 2 days for light and dark conditions
+```
+
+```{r, echo=FALSE, eval=FALSE}
 t.test(Light2Day$height, Dark2Day$height)
 ```
 
 **Compare the data at 4 and 6 days on your own.**
 
-## Answer the following question based on your statistical analysis
-  		  
 * Under which condition did the seedlings grow better? Light or dark?
 
-## Need more information on mean and standard deviation?
+## More material to help you understand mean and standard deviation
 
 Check out this interactive website for a better understanding of mean and standard deviation!
  
 http://www.zoology.ubc.ca/~whitlock/Kingfisher/SamplingNormal.htm
+
+Click on the tutorial button to work though the example.
+
+* When you sample multiple individuals do you see variation?
+* When you calculate the mean of your samples what are you estimating?
+* Why do you need to calculate the mean of many samples (each of which is the mean of multiple measurements)?
+
+## More material to help you work better in R
+
+Try swirl, an interactive tutorial to learn R in R and learn some statistics and data analysis. 
+
+* Make a new project in a new folder called swirl
+* In the console window (lower left) of R Studio type the following then follow the instructions.
+
+```{r, eval=FALSE}
+library(swirl)
+swirl_options(swirl_data_dir='~')
+swirl()
+```
+
+* You can continue your tutorial where you left off at any time. Your progress is automatically saved.
+* When you open a different or new project after using swirl R will ask if you want to save workspace image. Answer yes to record the commands you have typed in swirl so your TA can see your progress.
+* Make sure to use the same name to continue your work.
