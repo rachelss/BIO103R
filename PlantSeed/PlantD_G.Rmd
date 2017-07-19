@@ -1,6 +1,7 @@
 ---
 title: 'Lab 5: Plant Differentiation and Growth'
 output:
+  html_document: default
   pdf_document: default
   word_document: default
 ---
@@ -58,6 +59,8 @@ url <- 'https://docs.google.com/spreadsheets/d/1MOkh3SNsuuTixjRFi4ptYmjimUJ9rGXI
 # Load the data from google sheets
 ```
 
+*  Note: the follwoing instructions show assigned the data to a variable named plant_data. You can use this name and follow these intructions or change to a new variable name.
+
 ```{r load5, echo=FALSE}
 plant_data <- gsheet2tbl(url)
 ```
@@ -68,6 +71,9 @@ Remember, once we have our data in, it is always good to check to make sure the 
 # Check your data looks right (first lines only)
 head(plant_data)
 ```
+
+* Note: here the data are called `plant_data` - your may have a different name
+
 ## 2. Graphing the Seedling Data
 
 Just like last time, we are going to use `ggplot` to graph the data. Because we want to compare the seedlings grown under light and dark conditions, we are going to graph both sets of data together. We are first going to graph the data as points. This way you can see how much variation is in your data.
