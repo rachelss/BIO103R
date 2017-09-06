@@ -1,9 +1,8 @@
 ---
 title: "Using R in field sampling -- BIO 104"
-author: "Linda Forrester"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
 
@@ -28,9 +27,6 @@ Log in to the R Studio server at https://celsrs.uri.edu/ . This will enable you 
 
 You will get your login information from your TA. Your password is the same as username.
 
-If you would like to use RStudio on your personal computer see
-[instructions](Rsetup.html).
-
 **Open RStudio and make a new project.**
 
 * Select from top left corner:  
@@ -38,38 +34,45 @@ If you would like to use RStudio on your personal computer see
     + `New Directory` and `Empty Project` 
     + `Directory name:  FieldSampling`
     + Leave the Subdirectory as the default:  ~
+![](RStudioFile.png)
                                   
 * Select from top left corner:  
     + `File` - `New File` - `R Script`
   
+![](RStudioOverview.png)
+
 Making a new project and script will give you four windows open in R: 
 a *script* to help you keep track of the commands you are entering, 
 a *console* where those commands are run, 
 an *environment* that show what data you have, and 
 a *file* window.
-[Click here for an example](RStudioOverview.png)
+
 
 ## How to get your data into R so you can use it
 
 Last week you calculated the diversity index for each plot within each of four site types. A diversity index allows you to understand the variation in diversity among site types.
 The following lines of code will allow you to get your data (the class data about the diversity of each plot) into R directly from Google Sheets.
 
-**Type the code (from the grey boxes below) into the SCRIPT window of RStudio. Run each line using the [Run button](RStudioRun.png) (top left of the SCRIPT window in RStudio)**
-  
 ### Make the tools you need available in R.
 
-Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want. 
-  
+The tools you need are found in "packages". Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want. 
+
 ```{r }
 library(gsheet)
 ```
+
+**Type the code (from the grey boxes) into the SCRIPT window of RStudio. Run each line using the Run button (top right of the SCRIPT window in RStudio)** ![](RStudioRun.png)
 
 ### Tell R where to get your data.
 
 Assign the web address of the data (the "https" address) to a variable (here our variable is called "url" for "uniform resource locator". This is the term for an address on the web (you can name your variable anything though). You assign a number or word or data to a variable using `<-` (which makes something that looks like an arrow). The variable name goes on the left of the arrow and the information goes on the right. 
 
-```{r }
+```{r echo=FALSE}
 url <- 'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
+```
+
+```{r eval=FALSE}
+url <- 'https://docs.google.com/spreadsheets/d/15_Oba64U8UsV9CdqrBYNSTTS5YpTARmRrBKDiQwELlk'
 ```
 
 ### Assign the data to a variable
@@ -80,6 +83,7 @@ In this case the data is contained in the variable `diversitydata`. The function
 diversitydata <- gsheet2tbl(url)
 ```
 
+* you will need to run each line separately (put the cursor on each line and click run)
 * the line was run correctly if you get the prompt (`>`) in the console window at the bottom of RStudio
 * view your data by clicking on the item in the Data window on the right side (my data is called `diversitydata` - yours may be named something else) - this will open a new tab above so you can look at the data
 
@@ -94,10 +98,10 @@ library(gsheet)
 
 #assign the website address for the data to a variable using an arrow <-
 # "variable" <- "website address for data"
-url<-'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
+url<-'https://docs.google.com/spreadsheets/d/15_Oba64U8UsV9CdqrBYNSTTS5YpTARmRrBKDiQwELlk'
 
 #load the data from google sheets
-# "varible" <- "command to work on" (data from last line)
+# "variable" <- "command to work on" (data from last line)
 diversitydata <- gsheet2tbl(url)
 ```
 
@@ -131,9 +135,12 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))
 * put a `+` between the `ggplot` command and `geom_point()`
 
 ```{r }
+#insert comment here
 ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_point()
 ```
+
+**Add real comments to your script**
 
 ### Add a boxplot on top of your plot
 
@@ -147,10 +154,13 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 * note the `+` must come at the end of a line or the command will terminate and not plot another layer
 
 ```{r }
+#insert comment here
 ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_point()+
   geom_boxplot()
 ```
+
+**Adjust comments as needed**
 
 * in order to see both the box and the points plot the box first then the point layer on top
   + note: the order of the plotting instructions specifies how the plot is made - i.e. first the base, then the points, then the box covering the points
@@ -159,6 +169,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 **SAVE your work**
 Save your script by clicking `File - Save`.  Your work will save to the server that we are using for this lab.  You will be able to access your work on this server from other computers, as long as you know the web address and your username and password.
 
+## Plotting Part II
 
 ### Reorder data on the X-axis
 
@@ -169,6 +180,7 @@ If you want to make particular comparisons, such as between mowed sites, you mig
   + limits specifies the range of data on the x axis - since the data are categorical not continuous (e.g. from 1-10) you put the items in a list
 
 ```{r }
+#insert comment here
 ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_boxplot()+
   scale_x_discrete(limits=c("SuM", "ShM", "SuNM", "ShNM"))
