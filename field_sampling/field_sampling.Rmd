@@ -115,7 +115,7 @@ diversitydata <- gsheet2tbl(url)
 
 **Use the # symbol to add comments to your script as you enter the commands below**
 
-## 4. Plot results
+## 4. Plot your data
 
 To compare the diversity values among site types we need to plot the values for each site type.
 
@@ -177,7 +177,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 * plot just the boxplot as this is the typical way to visualize the data
 
 
-## 5. Plotting Part II
+## 5. Edit your boxplots
 
 ### 5a. Reorder data on the X-axis
 
