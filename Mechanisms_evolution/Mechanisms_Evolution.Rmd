@@ -219,7 +219,7 @@ Your y-axis should start at 0. Also, to make a good comparison between experimen
 
 Note that these graphs do not show the variance in the data. We will show you how to add error bars in future labs. 
 
-## 6. Compare number of snails in different groups
+## 7. Compare number of snails in different groups
 
 Now that we have produced graphs that allow us to visualize our data, we are interested in knowing if the number of snails of each color differs. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set. 
 
