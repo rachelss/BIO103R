@@ -5,18 +5,20 @@ output:
   html_document: default
 ---
 
-## 1. Load Data Into R
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,fig.width = 5, fig.height = 3)
+```
 
-We will use a similar procedure as the last lab to load data into R so that we can work with it.
+## 1. Getting Started
 
-* Make a new project in a new folder and open a new script.
+**Make a new project in a new folder and open a new script.**
 
 It is standard practice to first load all libraries you will need. In this case, we will be using `ggplot2` again to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
 
 For this lab we will provide you with the directions of what to do by showing you the comments you should enter in you R script.
 
 * Copy the comment lines into your script
-* Enter the necessary code based on the previous lab. In any case where you have not seen the necessary code it is provided.
+* Enter the necessary code based on the previous lab. In any case where you have not seen the necessary code it is provided. **In cases where you should know the code already you should check assignment 1 if you need help.**
 
 ```{r load1}
 # Load the libraries ggplot2 and gsheet
@@ -27,7 +29,11 @@ library(ggplot2)
 library(gsheet)
 ```
 
-Next, load in the data. Today's data is found at:
+## 2. Get Data into R
+
+We will use a similar procedure as the last lab to load data into R so that we can work with it.
+
+Next, load in the data (i.e. tell R where your dataset is). Today's data is found at:
 
 https://docs.google.com/spreadsheets/d/1t63u8_5onAk4PNK1bATVSGVxwOcMzvPLuIInP1UgBzE
 
@@ -40,7 +46,7 @@ url <- 'https://docs.google.com/spreadsheets/d/1t63u8_5onAk4PNK1bATVSGVxwOcMzvPL
 ```
 
 ```{r }
-# Load the data from google sheets
+# Load the data from google sheets and store in a variable
 ```
 
 ```{r read, echo=FALSE}
@@ -53,7 +59,7 @@ Once we have our data in, it is always good to check to make sure the data was i
 # Check your data looks right (first lines only)
 head(snail_data)
 ```
-## 2. Find The Average Snail Count in the Oystercatcher Data
+## 3. Find The Average Snail Count in the Oystercatcher Data
 
 We are interested in differences in population size between red and white snails over time. To graph the average snail population size over time, you first need to calculate the class averages for each snail type at each generation time for each experiment. Start with the oystercatcher data (experiment 1). 
 
@@ -95,7 +101,7 @@ Here we asking R to give us the mean of the subset of snails we found earlier. T
 
 We could keep doing this for each experiment, at each generation time, for each color of snail. Now I bet you're saying "Wait...there are 4 generation times, two colors, and two experiments, which would mean 16 lines of code!...this will take forever!", and you'd be correct! Let's let the computer do all this calculating for us.
 
-## 3. Automatically perform calculations on groups of data
+## 4. Automatically perform calculations on groups of data
 
 Rather than calculate the mean for each group manually we will use the `group_by` function from `dplyr` to split the data into groups. `group_by` takes the data, followed by each column you want to group by.
 
@@ -111,29 +117,29 @@ Next we calculate the mean for each group, and put this into a new data table us
 snail_data_means <- summarise(grouped_snail_data,mean=mean(snails))
 ```
 
-Check the first few lines of your data using `head`
+Check the first few lines of your data using `head`.
 
 ```{r h, eval=FALSE}
 head(snail_data_means)
 ```
 
-## 4. Graphing the OysterCatcher Data
+## 5. Graphing the OysterCatcher Data
 
-Just like last time, we are going to use `ggplot` to graph the data. 
+Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a library you load; `ggplot` is the function you use for graphing).
 
 * Filter your new dataset (containing the means) for just experiment 1 (otherwise, you would graph both the oystercatcher and the driftlog data, making a very confusing graph to look at).
 * Assign the filtered data to a new variable.
 
 ```{r filt}
-# Get just averages for exp 1
+# Filter data to include only averages for exp 1
 ```
 
 ```{r filt2, echo=FALSE}
-# Get just averages for exp 1
+# Filter data to include only averages for exp 1
 snail_data_means_ex1 <- filter(snail_data_means,exp==1)
 ```
 
-### First create the base layer of your plot
+### 5a. Create the base layer of your plot
 
 * Use your new filtered dataset
 
@@ -145,7 +151,7 @@ ggplot(snail_data_means_ex1,
 
 Notice the addition of `color` to aes. The `color` variable separates the data by each value of `snailcolor` and then plots these separately on the same graph. 
 
-### Second add the line and points to your plot 
+### 5b. Add the points to your plot 
 
 * Make your comments relevant to your graph
 
@@ -153,15 +159,29 @@ Notice the addition of `color` to aes. The `color` variable separates the data b
 # Add the line and points to your plot
 ggplot(snail_data_means_ex1, 
        aes(x=generation, y=mean, color=snailcolor))+
+  geom_point()
+
+```
+
+### 5c. Add a line to your plot to connect points
+
+The layer to add a line is `geom_line()` and it is added just like you add `geom_point()`
+
+```{r plot2a, echo=FALSE}
+# Add the line and points to your plot
+ggplot(snail_data_means_ex1, 
+       aes(x=generation, y=mean, color=snailcolor))+
   geom_line()+geom_point()
 
 ```
 
-### Third add labels to your plot and change axis titles 
+Note: `geom_line()` and `geom_point()` both are followed by empty parentheses. Because each `geom` is a function it can take arguments (i.e. particular instructions or information). These arguments need to go in the parentheses associated with the function. In this case, these functions do not take additional arguments, but we will see additional layers that do.
+
+### 5d. Add labels to your plot and change axis titles 
 
 Just like last class, you'll want to clean up your graph and make it look professional.
 
-* To label the axes make a new layer using `labs(x="", y="", color="")`. Enter labels for the x axis, y axis, and legend in the quotes.
+* To label the axes make a new layer using `labs(x="", y="", color="")`. Enter labels for the x axis, y axis, and legend in the quotes. Note that x, y, and color are all arguments for the `labs` function.
 
 ```{r plot3, echo=FALSE}
 #Label your plot and change axes titles
@@ -172,13 +192,13 @@ ggplot(snail_data_means_ex1,
        color="Forrester change legend title")
 ```
 
-## 5. Graphing The Driftlog Experiment
+## 6. Graphing The Driftlog Experiment
 
 Repeat everything you did for experiment 1 for experiment 2.
 Make sure your axis and legend titles are appropriate.
 
 ```{r plot4a}
-# Filter means data for exp 2
+# Filter data to include only averages for exp 2
 
 # Graph exp 2 data
 ```
@@ -193,7 +213,9 @@ ggplot(snail_data_means_ex2,
        color="Forrester change legend title")
 ```
 
-Remember to check the scale of your plots. In many cases, your Oystercatcher data will have a much larger y axis than your driftwood experiment. Why do you think this is?
+Take a look at the scale of your plots. In many cases, your Oystercatcher data will have a much larger y axis than your driftwood experiment. Why do you think this is?
+
+Your y-axis should start at 0. Also, to make a good comparison between experiments the y-axes of the two plots should be the same. To change your y-axis **add a layer `xlim(0, 50)`** (make sure to use the appropriate numbers for your data).
 
 Note that these graphs do not show the variance in the data. We will show you how to add error bars in future labs. 
 
@@ -226,7 +248,7 @@ Now that we have separate variables for each subset of data, we can run our *t*-
 **What is your null hypothesis for the Oystercatcher data?**
 
 ```{r }
-# My null hypothesis is: 
+# My null hypothesis is that red and white snail numbers are the same at the third generation of experiment 1
 
 # Oystercatcher_ttest
 t.test(Red1$snails, White1$snails)
