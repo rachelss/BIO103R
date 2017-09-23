@@ -1,6 +1,7 @@
 ---
 title: 'BIO104 Lab A2: Mechanisms of Evolution'
 output:
+  word_document: default
   pdf_document: default
   html_document: default
 ---
@@ -11,28 +12,29 @@ knitr::opts_chunk$set(echo = TRUE,fig.width = 5, fig.height = 3)
 
 ## Goals for Lab 2
 
-* Write commands based on descriptive comments
-* Subset your data using dplyr
-* Use R to calculate the mean of subsets of data
-* Plot line graphs in ggplot
-* Use colors to show difference subsets of data
-* Perform a t-test
+Be able to...
+
+* Create code that you will understand in the future (i.e. by including comments)
+* Calculate summary statistics for various subsets of data (using dplyr in R)
+* Plot line graphs (using ggplot)
+* Plot different subsets of data together (colors in ggplot)
+* Compare two datasets (using a t-test in R)
 
 
 ## 1. Getting Started
 
-**Make a new project and open a new script.**
+**Make a new project in a new directory and open a new script.**
 
 Begin by loading all the libraries you need. In this case, we will be using `ggplot2` to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
 
 * Copy the comment lines into your script
-* Enter the necessary code based on the previous lab and your R script from Lab 1. **In cases where you should know the code already you should check the Lab 1 Manual if you need help.**
+* Enter the necessary code based on the previous lab and your R script from Lab A1. **If there are no code instructions then look at your Lab A1 materials**
 
 ```{r load1}
-# Load the packages ggplot2, gsheet, and dplyr
+# Load the packages ggplot2, gsheet, and dplyr using the library command
 ```
 
-```{r load2, echo=FALSE}
+```{r load2, echo=FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(gsheet)
 library(dplyr)
@@ -52,16 +54,19 @@ url <- 'https://docs.google.com/spreadsheets/d/1t63u8_5onAk4PNK1bATVSGVxwOcMzvPL
 ```
 
 ```{r }
-# load the data stored in the variable url
-# use the gsheet2tbl function
-# store it as the variable snail_data
+# Load the data stored in the variable url
+# using the gsheet2tbl function and storing it as the variable snail_data
 ```
 
 ```{r read, echo=FALSE}
 snail_data <- gsheet2tbl(url)
 ```
 
-Once we have our variables, it is always good to check to make sure the data was imported correctly. Click on the variables listed in the R Environment (top right) and compare them to the Google Sheet data. 
+Once we have our variables, it is always good to check to make sure the data was imported correctly. Click on the variables listed in the R Environment (top right) and compare them to the Google Sheet data. Another way to look at the first few lines of your data is using the head function:
+
+```{r, eval=FALSE}
+head(snail_data)
+```
 
 **These are column names. You will use them to analyze and plot the data.** 
 
@@ -71,25 +76,29 @@ Once we have our variables, it is always good to check to make sure the data was
 * `snailcolor` is camouflaged or obvious (white or red)
 * `snails` is the number of snails
 
+You can also see the column names (i.e. the variables) by using the `colnames` function.
+```{r }
+colnames(snail_data)
+```
 
 ## 3. Find the average snail count in groups of data
 
 We are interested in differences in population size between red and white snails over time (`snailcolor`), between different generations (`generation`), and between experiments (`exp`). To graph the average snail population size over time, you first need to calculate the averages for each snail type at each generation time for each experiment. We want to take the average of the data for each experiment / generation / color combination. 
 
-We will use the `group_by` function from the `dplyr` package to create new variables with subsetted data. Tell `group_by` what variable you want to subset, followed by the columns you want to include.
+We will use the `group_by` function from the `dplyr` package to create a new variable where each subset of data is labeled. Tell `group_by` the name of the data you want to divide into subsets, followed by the columns you want to include.
 
 ```{r gb}
 # Group the snail_data variable by exp, generation, and snailcolor
-# Use the group_by function
+# using the group_by function
 grouped_snail_data <- group_by(snail_data, exp, generation, snailcolor)
 ```
 
 Next we calculate the mean for each group, and put this into a new variable `snail_data_means` using the `summarise` function. Here the name of the column containing the mean number of snails (calculated using the function `mean`) is "mean".
 
 ```{r sm}
-# Calculate the mean number of snails for each group
-# Use the summarise function
-# Tell summarise what variable you want to summarize (grouped_snail_data) and that you want the mean value of the snails.
+# Calculate the mean number of snails for each group using the summarise function
+# by giving the name of the data you want to summarize (`grouped_snail_data`)
+# and that you want the mean value of the snail counts (labeled as `snails`).
 
 snail_data_means <- summarise(grouped_snail_data,mean=mean(snails))
 ```
@@ -101,14 +110,14 @@ Click on the `snail_data_means` variable in the in the R environment (top right)
 
 ### 4a. Subset your data from Experiment 1
 
-Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a library you load and `ggplot` is the function you use for graphing).
+Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a package you load and `ggplot` is the function you use for graphing).
 
 * Filter the mean data variable (`snail_data_means`) for just Experiment 1 (otherwise, you would graph both the data from all experiments, making a very confusing graph to look at).
 * Assign the filtered data to a new variable named `snail_data_means_exp1`.
 
 ```{r filt}
-# Filter data to include only means for Experiment 1 (exp==1). Refer to Lab 1, Section 5d for the commands.
-# Name this variable snail_data_means_exp1
+# Filter data to include only means for Experiment 1 (exp==1). 
+# Refer to Lab A1, Section 5d for the commands.
 ```
 
 ```{r filt2, echo=FALSE}
@@ -122,13 +131,13 @@ snail_data_means_exp1 <- filter(snail_data_means,exp==1)
 * Add `color` to the `aes` function. The `color` variable separates the data based on `snailcolor` and then plots these separately on the same graph (in different colors!). 
 
 ```{r plot1}
-# Make the base layer of your plot for the snail_data_means_exp1 data
+# Make your plot for the snail_data_means_exp1 data
 ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor)) + geom_point()
 ```
 
 ### 4c. Add a line to your plot to connect points
 
-The function to add a line is `geom_line()` and it is added to the ggplot command just like you add `geom_point()`
+The function to add a line is `geom_line()` and it is added to the ggplot command just like you add `geom_point()`.
 
 ```{r plot}
 # Add a line to the plot
@@ -141,14 +150,13 @@ ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
 
 ```
 
-Note: `geom_line()` and `geom_point()` are followed by empty parentheses. `geom` is a function that can accept arguments (i.e. `labels` or `limits` or `name`). These arguments need to go in the parentheses associated with the function. In this case, these functions do not have additional arguments, but we will see ones that do.
-
+Note: `geom_line()` and `geom_point()` are followed by empty parentheses because they are functions. Functions must be able to accept arguments (e.g. the name of a dataset). These arguments need to go in the parentheses associated with the function. In this case, these functions do not have additional arguments, but we will see ones that do.
 
 ### 4d. Add labels to your plot and change axis titles 
 
 Label the axes using `scale_x_discrete` and `scale_y_continuous` like you did in Lab 1, Section 5b. Use `name=" "` to name the x and y axes. Label the legend using ` + labs(color="Snail Color") `.
 
-```{r plot}
+```{r plot3a}
 #Label your plot and change axes titles
 ```
 
@@ -158,18 +166,18 @@ ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
   scale_x_discrete(name="Generation") + scale_y_continuous(name="Mean") + labs(color="Snail Color")
 
 ```
+
 **Save this plot as Lab1_Experiment1 so that you can turn it in with your lab report.**
 
 
 ## 5. Plot your data from Experiment 2
 
-Repeat everything you did for Experiment 1 for Experiment 2.
-Make sure your axis and legend titles are correct.
-Add the `ylim` function to the end of the command to make sure your y-axis starts at 0: `+ ylim(0, 50)`
+* Repeat everything you did for Experiment 1 for Experiment 2.
+* Make sure your axis and legend titles are correct.
+* In your `scale_y_continuous` add an argument `limits = c(0,50)` to make sure your y-axis starts at 0. Note, the maximum for your y-axis may not be 50.
 
 ```{r plot4a}
-# Filter data to include only means for Experiment 2
-# Name this variable snail_data_means_exp2
+# Filter data to include only means for Experiment 2 and name this variable snail_data_means_exp2
 
 # Graph Experiment 2 data using the same commands you used in Section 4.
 ```
@@ -177,10 +185,14 @@ Add the `ylim` function to the end of the command to make sure your y-axis start
 ```{r plot4, echo=FALSE}
 snail_data_means_exp2 <- filter(snail_data_means,exp==2)
 
-ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+ geom_line()+geom_point()+
-  scale_x_discrete(name="Generation") + scale_y_continuous(name="Mean") + labs(color="Snail Color") + ylim(0,50)
+ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+
+  geom_line()+geom_point()+
+  scale_x_discrete(name="Generation") + 
+  scale_y_continuous(name="Mean", limits = c(0,50)) + 
+  labs(color="Snail Color")
   
 ```
+
 **Save this plot as Lab1_Experiment2 so that you can turn it in with your lab report.**
 
 Take a look at the scale of your plots. In many cases, your Experiment 2 data will have a much larger y-axis than your Experiment 1 data. Why do you think this is? 
@@ -189,7 +201,7 @@ Note that these graphs do not show the variance in the data. We will show you ho
 
 ## 6. Compare number of snails in different groups
 
-Now that we have produced graphs, we are interested in knowing if the number of snails of each color differs. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set (`snail_data`). 
+Now that we have examined our data visually, we are interested in knowing if the number of snails of each color differs at the end of the experiment. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set (`snail_data`). 
 
 First we filter our white and red snails from Generation 3 in both the Experiments 1 and 2.
 Use the command from `Red1` for `Red2`, `White1`, and `White2`.
@@ -197,7 +209,7 @@ Use the command from `Red1` for `Red2`, `White1`, and `White2`.
 ```{r }
 # Subset snail data by generation, experiment and snail color and store it in the Red1 variable.
 # Red1 contains just data from exp 1 red snails
-Red1 <- filter(snail_data, exp==1 | generation==3 | snailcolor=="red")
+Red1 <- filter(snail_data, exp==1 & generation==3 & snailcolor=="red")
 
 # White1 contains just data from exp 1 white snails
 # (write the command for White1 here)
@@ -208,9 +220,9 @@ Red1 <- filter(snail_data, exp==1 | generation==3 | snailcolor=="red")
 ```
 
 ```{r filtercol, echo=FALSE}
-White1 <- filter(snail_data, exp==1 | generation ==3 | snailcolor=="white")
-Red2 <- filter(snail_data, exp==2 | generation ==3 | snailcolor=="red")
-White2 <- filter(snail_data, exp==2 | generation ==3 | snailcolor=="white")
+White1 <- filter(snail_data, exp==1 & generation ==3 & snailcolor=="white")
+Red2 <- filter(snail_data, exp==2 & generation ==3 & snailcolor=="red")
+White2 <- filter(snail_data, exp==2 & generation ==3 & snailcolor=="white")
 ```
 
 Now that we have separate variables for each subset of data, we can run our *t*-tests. Input the two groups you want to compare, and then select the type of *t*-test to use. For this class, we will be using the two-sample *t*-test because we have two samples (a one sample test compares your data to some expected value).
@@ -218,7 +230,8 @@ Now that we have separate variables for each subset of data, we can run our *t*-
 **What is your null hypothesis for the Experiment 1 data?**
 
 ```{r }
-# My null hypothesis is that red and white snail numbers are the same at the third generation of experiment 1.
+# My null hypothesis is that
+# red and white snail numbers are the same at the third generation of experiment 1.
 
 # Oystercatcher_ttest
 t.test(Red1$snails, White1$snails)
@@ -240,8 +253,11 @@ Imagine you are willing to accept a 5% probability that you reject the null hypo
 
 ## Lab 2 Report Submission
 Turn in a hard copy of your lab report that includes the following:
-1. Plot of Experiment 1 Means from Section 4d
-2. Plot of Experiment 2 Means from Section 5
-3. 
-4. 
+
+1. Summary table for your section's data
+2. Line graph of Experiment 1 means from Step 4d
+3. Line graph of Experiment 2 means from Step 5
+4. Results of your t-tests in table form for both experiments from Step 6
+5. Explain why you rejected or failed to reject your hypotheses and explain the processes that influenced both experiments.
+6. Your code. Code should be organized, include good comments, and include only code that works and does not produce errors.
 
