@@ -1,5 +1,5 @@
 ---
-title: 'BIO104 Lab A2: Mechanisms of Evolution'
+title: 'Lab 2: Mechanisms of Evolution'
 output:
   pdf_document: default
   html_document: default
@@ -9,42 +9,36 @@ output:
 knitr::opts_chunk$set(echo = TRUE,fig.width = 5, fig.height = 3)
 ```
 
-## Goals for Lab 2
-
-* Write commands based on descriptive comments
-* Subset your data using dplyr
-* Use R to calculate the mean of subsets of data
-* Plot line graphs in ggplot
-* Use colors to show difference subsets of data
-* Perform a t-test
-
-
 ## 1. Getting Started
 
-**Make a new project and open a new script.**
+**Make a new project in a new folder and open a new script.**
 
-Begin by loading all the libraries you need. In this case, we will be using `ggplot2` to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
+It is standard practice to first load all libraries you will need. In this case, we will be using `ggplot2` again to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
+
+For this lab we will provide you with the directions of what to do by showing you the comments you should enter in you R script.
 
 * Copy the comment lines into your script
-* Enter the necessary code based on the previous lab and your R script from Lab 1. **In cases where you should know the code already you should check the Lab 1 Manual if you need help.**
+* Enter the necessary code based on the previous lab. In any case where you have not seen the necessary code it is provided. **In cases where you should know the code already you should check assignment 1 if you need help.**
 
 ```{r load1}
-# Load the packages ggplot2, gsheet, and dplyr
+# Load the libraries ggplot2 and gsheet
 ```
 
 ```{r load2, echo=FALSE}
 library(ggplot2)
 library(gsheet)
-library(dplyr)
 ```
 
-## 2. Get your data into R
+## 2. Get Data into R
 
-We will use the same procedure as the last lab to load data into R.
-Go to the Lab Sakai Site and scroll down like you did last week. Select the link for your lab section.
+We will use a similar procedure as the last lab to load data into R so that we can work with it.
+
+Next, load in the data (i.e. tell R where your dataset is). Today's data is found at:
+
+https://docs.google.com/spreadsheets/d/1t63u8_5onAk4PNK1bATVSGVxwOcMzvPLuIInP1UgBzE
 
 ```{r load3}
-# Store the Google sheets link as the variable url
+# Assign website address for the data to a variable
 ```
 
 ```{r load4, echo=FALSE}
@@ -52,155 +46,191 @@ url <- 'https://docs.google.com/spreadsheets/d/1t63u8_5onAk4PNK1bATVSGVxwOcMzvPL
 ```
 
 ```{r }
-# load the data stored in the variable url
-# use the gsheet2tbl function
-# store it as the variable snail_data
+# Load the data from google sheets and store in a variable
 ```
 
 ```{r read, echo=FALSE}
 snail_data <- gsheet2tbl(url)
 ```
 
-Once we have our variables, it is always good to check to make sure the data was imported correctly. Click on the variables listed in the R Environment (top right) and compare them to the Google Sheet data. 
+Once we have our data in, it is always good to check to make sure the data was imported correctly. To view ONLY the first few lines of the dataset use the command `head`.
 
-**These are column names. You will use them to analyze and plot the data.** 
+```{r head, eval=FALSE}
+# Check your data looks right (first lines only)
+head(snail_data)
+```
+## 3. Find The Average Snail Count in the Oystercatcher Data
 
-* `exp` is the experiment number
-* `group` is your group number
-* `generation` is the number of generations from the beginning (0,1,2,3)
-* `snailcolor` is camouflaged or obvious (white or red)
-* `snails` is the number of snails
+We are interested in differences in population size between red and white snails over time. To graph the average snail population size over time, you first need to calculate the class averages for each snail type at each generation time for each experiment. Start with the oystercatcher data (experiment 1). 
 
+Because we are focusing on the oystercatcher experiment first, we need to filter out the data from the first experiment. One way to do this is the `filter` function found in the library `dplyr`.
 
-## 3. Find the average snail count in groups of data
+```{r dp, warning=FALSE, message=FALSE}
+# Load the dplyr library to provide a method of filtering the data
+library(dplyr)
+```
 
-We are interested in differences in population size between red and white snails over time (`snailcolor`), between different generations (`generation`), and between experiments (`exp`). To graph the average snail population size over time, you first need to calculate the averages for each snail type at each generation time for each experiment. We want to take the average of the data for each experiment / generation / color combination. 
+Now filter the data.
 
-We will use the `group_by` function from the `dplyr` package to create new variables with subsetted data. Tell `group_by` what variable you want to subset, followed by the columns you want to include.
+```{r}
+# Filter data: experiment is equal to 1
+exp1 <- filter(snail_data, exp==1)
+```
+
+This code filters for the snails in experiment 1.
+The `==` checks for equality (a `=` is the same as `<-` and assigns a value to a variable - that is not what you want here).
+
+We actually want to take the average of the class data for each experiment / generation / color combination. 
+
+* Get the rows of data for white snails in experiment 1 in generation 0.
+
+```{r}
+# Filter data: experiment 1, gen 0, col white
+exp1gen0colW <- filter(snail_data, exp==1 & generation==0 & snailcolor=="white")
+```
+
+* When you use words in R (e.g. "white"), put the word in quotes. Words that are not in quotes are interpreted as variables. There is no 'white' variable.
+* Calculate the average (mean) number of snails for these rows
+
+```{r , eval=FALSE}
+# Calculate mean of the snails column of exp1gen0colW
+mean(exp1gen0colW$snails)
+```
+
+Here we asking R to give us the mean of the subset of snails we found earlier. The `$` in the code points R to the the column of our data that we are interested in. 
+
+We could keep doing this for each experiment, at each generation time, for each color of snail. Now I bet you're saying "Wait...there are 4 generation times, two colors, and two experiments, which would mean 16 lines of code!...this will take forever!", and you'd be correct! Let's let the computer do all this calculating for us.
+
+## 4. Automatically perform calculations on groups of data
+
+Rather than calculate the mean for each group manually we will use the `group_by` function from `dplyr` to split the data into groups. `group_by` takes the data, followed by each column you want to group by.
 
 ```{r gb}
-# Group the snail_data variable by exp, generation, and snailcolor
-# Use the group_by function
+# Group data by exp, generation, snailcolor
 grouped_snail_data <- group_by(snail_data, exp, generation, snailcolor)
 ```
 
-Next we calculate the mean for each group, and put this into a new variable `snail_data_means` using the `summarise` function. Here the name of the column containing the mean number of snails (calculated using the function `mean`) is "mean".
+Next we calculate the mean for each group, and put this into a new data table using the `summarise` function. This function takes the data and the value you want to calculate. The latter is assigned to a column name using `=`. Here the name of the column containing the mean number of snails (calculated using the function `mean`) is "mean".
 
 ```{r sm}
 # Calculate the mean number of snails for each group
-# Use the summarise function
-# Tell summarise what variable you want to summarize (grouped_snail_data) and that you want the mean value of the snails.
-
 snail_data_means <- summarise(grouped_snail_data,mean=mean(snails))
 ```
 
-Click on the `snail_data_means` variable in the in the R environment (top right). What are your mean values for the data? Do they make sense?
+Check the first few lines of your data using `head`.
 
+```{r h, eval=FALSE}
+head(snail_data_means)
+```
 
-## 4. Plot your data from Experiment 1
+## 5. Graphing the OysterCatcher Data
 
-### 4a. Subset your data from Experiment 1
+Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a library you load; `ggplot` is the function you use for graphing).
 
-Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a library you load and `ggplot` is the function you use for graphing).
-
-* Filter the mean data variable (`snail_data_means`) for just Experiment 1 (otherwise, you would graph both the data from all experiments, making a very confusing graph to look at).
-* Assign the filtered data to a new variable named `snail_data_means_exp1`.
+* Filter your new dataset (containing the means) for just experiment 1 (otherwise, you would graph both the oystercatcher and the driftlog data, making a very confusing graph to look at).
+* Assign the filtered data to a new variable.
 
 ```{r filt}
-# Filter data to include only means for Experiment 1 (exp==1). Refer to Lab 1, Section 5d for the commands.
-# Name this variable snail_data_means_exp1
+# Filter data to include only averages for exp 1
 ```
 
 ```{r filt2, echo=FALSE}
 # Filter data to include only averages for exp 1
-snail_data_means_exp1 <- filter(snail_data_means,exp==1)
+snail_data_means_ex1 <- filter(snail_data_means,exp==1)
 ```
 
-### 4b. Create the base layer of your plot and add points
+### 5a. Create the base layer of your plot
 
-* Use your new filtered dataset (`snail_data_means_exp1`)
-* Add `color` to the `aes` function. The `color` variable separates the data based on `snailcolor` and then plots these separately on the same graph (in different colors!). 
+* Use your new filtered dataset
 
 ```{r plot1}
-# Make the base layer of your plot for the snail_data_means_exp1 data
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor)) + geom_point()
+# Make the base layer of your plot
+ggplot(snail_data_means_ex1, 
+       aes(x=generation, y=mean, color=snailcolor)) 
 ```
 
-### 4c. Add a line to your plot to connect points
+Notice the addition of `color` to aes. The `color` variable separates the data by each value of `snailcolor` and then plots these separately on the same graph. 
 
-The function to add a line is `geom_line()` and it is added to the ggplot command just like you add `geom_point()`
+### 5b. Add the points to your plot 
 
-```{r plot}
-# Add a line to the plot
+* Make your comments relevant to your graph
+
+```{r plot2, echo=FALSE}
+# Add the line and points to your plot
+ggplot(snail_data_means_ex1, 
+       aes(x=generation, y=mean, color=snailcolor))+
+  geom_point()
+
 ```
+
+### 5c. Add a line to your plot to connect points
+
+The layer to add a line is `geom_line()` and it is added just like you add `geom_point()`
 
 ```{r plot2a, echo=FALSE}
 # Add the line and points to your plot
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
+ggplot(snail_data_means_ex1, 
+       aes(x=generation, y=mean, color=snailcolor))+
   geom_line()+geom_point()
 
 ```
 
-Note: `geom_line()` and `geom_point()` are followed by empty parentheses. `geom` is a function that can accept arguments (i.e. `labels` or `limits` or `name`). These arguments need to go in the parentheses associated with the function. In this case, these functions do not have additional arguments, but we will see ones that do.
+Note: `geom_line()` and `geom_point()` both are followed by empty parentheses. Because each `geom` is a function it can take arguments (i.e. particular instructions or information). These arguments need to go in the parentheses associated with the function. In this case, these functions do not take additional arguments, but we will see additional layers that do.
 
+### 5d. Add labels to your plot and change axis titles 
 
-### 4d. Add labels to your plot and change axis titles 
+Just like last class, you'll want to clean up your graph and make it look professional.
 
-Label the axes using `scale_x_discrete` and `scale_y_continuous` like you did in Lab 1, Section 5b. Use `name=" "` to name the x and y axes. Label the legend using ` + labs(color="Snail Color") `.
-
-```{r plot}
-#Label your plot and change axes titles
-```
+* To label the axes make a new layer using `labs(x="", y="", color="")`. Enter labels for the x axis, y axis, and legend in the quotes. Note that x, y, and color are all arguments for the `labs` function.
 
 ```{r plot3, echo=FALSE}
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
+#Label your plot and change axes titles
+ggplot(snail_data_means_ex1, 
+       aes(x=generation, y=mean, color=snailcolor))+
   geom_line()+geom_point()+
-  scale_x_discrete(name="Generation") + scale_y_continuous(name="Mean") + labs(color="Snail Color")
-
+  labs(x="Forrester x label", y="Forrester y label",
+       color="Forrester change legend title")
 ```
-**Save this plot as Lab1_Experiment1 so that you can turn it in with your lab report.**
 
+## 6. Graphing The Driftlog Experiment
 
-## 5. Plot your data from Experiment 2
-
-Repeat everything you did for Experiment 1 for Experiment 2.
-Make sure your axis and legend titles are correct.
-Add the `ylim` function to the end of the command to make sure your y-axis starts at 0: `+ ylim(0, 50)`
+Repeat everything you did for experiment 1 for experiment 2.
+Make sure your axis and legend titles are appropriate.
 
 ```{r plot4a}
-# Filter data to include only means for Experiment 2
-# Name this variable snail_data_means_exp2
+# Filter data to include only averages for exp 2
 
-# Graph Experiment 2 data using the same commands you used in Section 4.
+# Graph exp 2 data
 ```
 
 ```{r plot4, echo=FALSE}
-snail_data_means_exp2 <- filter(snail_data_means,exp==2)
+snail_data_means_ex2 <- filter(snail_data_means,exp==2)
 
-ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+ geom_line()+geom_point()+
-  scale_x_discrete(name="Generation") + scale_y_continuous(name="Mean") + labs(color="Snail Color") + ylim(0,50)
-  
+ggplot(snail_data_means_ex2, 
+       aes(x=generation, y=mean, color=snailcolor))+
+  geom_line()+geom_point()+
+  labs(x="Forrester x label", y="Forrester y label",
+       color="Forrester change legend title")
 ```
-**Save this plot as Lab1_Experiment2 so that you can turn it in with your lab report.**
 
-Take a look at the scale of your plots. In many cases, your Experiment 2 data will have a much larger y-axis than your Experiment 1 data. Why do you think this is? 
+Take a look at the scale of your plots. In many cases, your Oystercatcher data will have a much larger y axis than your driftwood experiment. Why do you think this is?
+
+Your y-axis should start at 0. Also, to make a good comparison between experiments the y-axes of the two plots should be the same. To change your y-axis **add a layer `xlim(0, 50)`** (make sure to use the appropriate numbers for your data).
+
 Note that these graphs do not show the variance in the data. We will show you how to add error bars in future labs. 
 
+## 7. Compare number of snails in different groups
 
-## 6. Compare number of snails in different groups
+Now that we have produced graphs that allow us to visualize our data, we are interested in knowing if the number of snails of each color differs. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set. 
 
-Now that we have produced graphs, we are interested in knowing if the number of snails of each color differs. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set (`snail_data`). 
-
-First we filter our white and red snails from Generation 3 in both the Experiments 1 and 2.
-Use the command from `Red1` for `Red2`, `White1`, and `White2`.
+First we filter our white and red snails from generation 3 in both the oystercatcher and driftlog experiments.
 
 ```{r }
-# Subset snail data by generation, experiment and snail color and store it in the Red1 variable.
+# Subset snail data by generation, experiment and snail color
 # Red1 contains just data from exp 1 red snails
-Red1 <- filter(snail_data, exp==1 | generation==3 | snailcolor=="red")
+Red1 <- filter(snail_data, exp==1 & generation==3 & snailcolor=="red")
 
 # White1 contains just data from exp 1 white snails
-# (write the command for White1 here)
 
 # Red2 contains just data from exp 2 red snails
 
@@ -208,23 +238,23 @@ Red1 <- filter(snail_data, exp==1 | generation==3 | snailcolor=="red")
 ```
 
 ```{r filtercol, echo=FALSE}
-White1 <- filter(snail_data, exp==1 | generation ==3 | snailcolor=="white")
-Red2 <- filter(snail_data, exp==2 | generation ==3 | snailcolor=="red")
-White2 <- filter(snail_data, exp==2 | generation ==3 | snailcolor=="white")
+White1 <- filter(snail_data, exp==1 & generation ==3 & snailcolor=="white")
+Red2 <- filter(snail_data, exp==2 & generation ==3 & snailcolor=="red")
+White2 <- filter(snail_data, exp==2 & generation ==3 & snailcolor=="white")
 ```
 
-Now that we have separate variables for each subset of data, we can run our *t*-tests. Input the two groups you want to compare, and then select the type of *t*-test to use. For this class, we will be using the two-sample *t*-test because we have two samples (a one sample test compares your data to some expected value).
+Now that we have separate variables for each subset of data, we can run our *t*-tests! Input the two groups you want to compare, and then select the type of *t*-test to use. For this class, we will be using the two-sample *t*-test because we have two samples (a one sample test compares your data to some expected value).
 
-**What is your null hypothesis for the Experiment 1 data?**
+**What is your null hypothesis for the Oystercatcher data?**
 
 ```{r }
-# My null hypothesis is that red and white snail numbers are the same at the third generation of experiment 1.
+# My null hypothesis is that red and white snail numbers are the same at the third generation of experiment 1
 
 # Oystercatcher_ttest
 t.test(Red1$snails, White1$snails)
 ```
 
-**What is your null hypothesis for the Experiment 2 data?**
+**What is your null hypothesis for the Driftlog data?**
 
 ```{r}
 # My null hypothesis is: 
@@ -233,15 +263,11 @@ t.test(Red1$snails, White1$snails)
 t.test(Red2$snails, White2$snails)
 ```
 
-The output from `t.test` gives you a lot of information. For this class, we are going to focus on the p-value. A p-value is the probability of getting data different from the observed data given that the null hypothesis is true.
+The output from `t.test` gives you a lot of information. For this class, we are going to focus on the p-value. A p-value is the probability of getting data as extreme or more extreme than the observed data given that the null hypothesis is true.
 
-Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for 20 experiments where the null is true, one of them will probably appear as if the null is false (1/20 = 5%). Because you have some variance in your data you need to allow for some probability of being wrong. If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis. 
+Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for 20 experiments where the null is true, one of them will probably appear as if the null is false (1/20 = 5%).  Because you have some variance in your data you need to allow for some probability of being wrong. If you're having trouble with the concept of variance think about flipping a coin. Most of the time your coin flips will not be 50/50 heads/tails. But you still don't reject it being a fair coin. If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis. 
 
+For each experiment
 
-## Lab 2 Report Submission
-Turn in a hard copy of your lab report that includes the following:
-1. Plot of Experiment 1 Means from Section 4d
-2. Plot of Experiment 2 Means from Section 5
-3. 
-4. 
-
+* can you reject the null hypothesis?
+* give a one sentence conclusion for each experiment
