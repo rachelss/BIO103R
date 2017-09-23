@@ -1,8 +1,8 @@
 ---
-title: 'Lab 5: Plant Differentiation and Growth'
+title: 'Lab A4: Plant Differentiation and Growth'
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
 
