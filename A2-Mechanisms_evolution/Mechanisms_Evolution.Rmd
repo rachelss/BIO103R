@@ -1,9 +1,9 @@
 ---
 title: 'BIO104 Lab A2: Mechanisms of Evolution'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -254,10 +254,10 @@ Imagine you are willing to accept a 5% probability that you reject the null hypo
 ## Lab 2 Report Submission
 Turn in a hard copy of your lab report that includes the following:
 
-1. Summary table for your section's data
+1. Summary table for your section's data (made in excel/sheets/or R)
 2. Line graph of Experiment 1 means from Step 4d
 3. Line graph of Experiment 2 means from Step 5
 4. Results of your t-tests for both experiments from Step 6
-5. Explain why you rejected or failed to reject your null hypotheses based on your t-test results and explain the processes that influenced both experiments.
+5. Explain why you rejected or failed to reject your null hypotheses based on your t-test results and explain the processes that influenced both experiments  (4-5 sentences).
 6. Your code. Code should be organized, include good comments, and include only code that works and does not produce errors.
 
