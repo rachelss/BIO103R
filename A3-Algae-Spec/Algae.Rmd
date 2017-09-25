@@ -1,9 +1,9 @@
 ---
-title: 'Lab A3. Absorption Spectrum of Algae'
+title: "Lab A3. Absorption Spectrum of Algae"
 output:
+  word_document: default
   pdf_document: default
   html_document: default
-  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -12,11 +12,19 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 
 ## Background
 
-Today we will be making a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotemeter you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
+Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotometer you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
+
+## Goals for Lab 2
+
+Be able to...
+* 
 
 ## 1. Getting Started
 
 **Make a new project in a new directory and open a new script.**
+
+* Copy the comment lines into your script
+* Enter the necessary code based on the previous lab and your R script from Labs A1 and A2.
 
 ```{r loadlib}
 # Load the packages ggplot2, gsheet, and dplyr
@@ -49,10 +57,10 @@ url <- 'https://docs.google.com/spreadsheets/d/1Dbo-YNgQ3ecQrz-NB8l3a_a-J2Y6laJK
 algae_data <- gsheet2tbl(url)
 ```
 
-Remember, once we have our data in, it is always good to check to make sure the data was imported correctly. Use `head` to check your imported data. 
+Remember, once we have our data in, it is always good to check to make sure the data was imported correctly.
 ```{r head, eval=FALSE}
 # Check your data looks right (first lines only)
-head(algae_data)
+
 ```
 
 ## 3. Graphing the Algae Data
