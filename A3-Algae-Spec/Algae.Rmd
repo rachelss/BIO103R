@@ -1,47 +1,57 @@
 ---
-title: "Lab A3. Absorption Spectrum of Algae"
+title: "BIO104 Lab A3. Photosynthesis and Absorption Spectrum of Algae"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
-
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 ```
 
-## Background
-
-Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotometer you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
 
 ## Goals for Lab 2
 
-Be able to...
-* 
+Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotometer you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
 
+Be able to...
+
+* Put your data into long form in your own Google Sheet.
+* Import data and graph your photometric readings as points. 
+* Compare photometric readings from 3 different algae on one graph using color.
+  
 ## 1. Getting Started
 
-**Make a new project in a new directory and open a new script.**
+### 1a. Put data in long form on Google Sheets
 
+Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). Remember that there can only be one datapoint per line. Copy the link from your Google Sheet to use in this lab.
+
+
+### 1b. Load the packages you need
+  
+**Make a new project in a new directory and open a new script.**
+_Refer to Lab 1, Part 2 if you need help._
+  
 * Copy the comment lines into your script
-* Enter the necessary code based on the previous lab and your R script from Labs A1 and A2.
+* Enter the code based on the previous labs and your R scripts from Labs A1 and A2.
 
 ```{r loadlib}
-# Load the packages ggplot2, gsheet, and dplyr
+# Load the packages ggplot2 and gsheet
 ```
 
 ```{r load2, echo=FALSE, message=FALSE}
 library(ggplot2)
 library(gsheet)
-library(dplyr)
 ```
+
 
 ## 2. Get your data into R
 
-We will use the same procedure as the last lab to load data into R. Go to the Lab Sakai Site and scroll down like you did last week. Select the link for your lab section.
 
 ```{r loaddata}
-# Store the Google sheets link as the variable url
+# Store your Google sheets link as the variable url
+
 ```
 
 ```{r load4, echo=FALSE}
@@ -49,7 +59,7 @@ url <- 'https://docs.google.com/spreadsheets/d/1Dbo-YNgQ3ecQrz-NB8l3a_a-J2Y6laJK
 ```
 
 ```{r }
-# load the data stored in the variable url using the gsheet2tbl function
+# load your data stored in the variable url using the gsheet2tbl function
 # and store it as the variable algae_data
 ```
 
@@ -57,37 +67,73 @@ url <- 'https://docs.google.com/spreadsheets/d/1Dbo-YNgQ3ecQrz-NB8l3a_a-J2Y6laJK
 algae_data <- gsheet2tbl(url)
 ```
 
-Remember, once we have our data in, it is always good to check to make sure the data was imported correctly.
+Remember, once we have our data in, it is always good to check to make sure the data was imported correctly. _Use the commands you learned in Lab 2, Part 2._
 ```{r head, eval=FALSE}
-# Check your data looks right (first lines only)
+# Check your data to make sure it looks right (first lines only and column names)
+
 
 ```
 
-## 3. Graphing the Algae Data
+```{r headcheck, echo=FALSE, eval=FALSE}
+head(algae_data)
+colnames(algae_data)
+```
 
-Just like last time, we are going to use `ggplot` to graph the data. We want to compare which wavelengths are most strongly and poorely absorbed by which species of algae. We are first going to graph the data as points. 
+
+## 3. Graphing your Algae Data
+
+Just like last time, you are going to use `ggplot` to graph your algae data. We want to compare which wavelengths are more absorbed or less absorbed by different species of algae. We are going to graph y data as points. 
+
+_Refer to Lab 2, Parts 4b and 4d if you need help._
 
 ### 3a. Create the base layer of your plot
 
-* First identify the variables (by looking at column names; _write them down_)
+First identify the variables (by looking at the column names)
+
 * What is the independent variable (x axis)?
 * What is the dependent variable (y axis)?
-* How will you plot different algae types separately?
+* How will you plot different algae types separately (color)?
+* Remember to label your axes and legend (include units!)
 
-```{r plot1a, echo=FALSE}
+```{r plotcomment}
+# Create the base layer of the plot using ggplot
+
+```
+
+```{r plot1a, echo=FALSE,fig.show = 'hide'}
 ggplot(algae_data, aes(x=Wavelength, y=Absorption, color=Algae))
 ```
 
-### 3b. Add the data to the plot (using `geom_point`)
-```{r plot1b, echo=FALSE, warning=FALSE}
-ggplot(algae_data, aes(x=Wavelength, y=Absorption, color=Algae))+
-  geom_point()
+### 3b. Add your data and labels to the plot (using `geom_point`)
+
+```{r plotcomment2}
+# Add datapoints and labels to the plot
+
 ```
 
-* What wavelengths are most strongly (and most poorly) absorbed by which algae extracts?
+```{r plot1b, echo=FALSE, warning=FALSE, fig.show = 'hide'}
+ggplot(algae_data, aes(x=Wavelength, y=Absorption, color=Algae))+
+  geom_point()+labs(x="Wavelength (nm)", y="Absorption", color="Algae Type")
 
-* Does your data match the known absorption spectra of different pigments found in chloroplasts?
+ggplot(algae_data, aes(x=Wavelength, y=Absorption, color=Algae))+
+  geom_point()+labs(color="Algae Type")+scale_x_continuous(name="Wavelength (nm)")
 
-* Which pigments have absorption spectra most similar to your results? 
+
+```
+
+**Save this plot as Lab3_graph so that you can turn it in with your lab report.**
 
 
+## Lab 3 Report Submission
+
+Turn in a hard copy of your lab report that includes the following:
+
+1. Summary table for your group's data ( _wide form_, made in excel/sheets/or R).
+2. Graph of absorbance values over the visible spectrum for all 3 algae samples (one plot, with different colors for different algae).
+3. Your code. Code should be organized, include good comments, and include only code that works and does not produce errors. 
+4. Answers to the following questions (at least one full page, double-spaced):
+
+* What wavelengths are most strongly (and most poorly) absorbed by which of the algae extracts? Directly reference your data and explain why you chose your answer.
+* Does your data match the known absorption spectra of different pigments found in chloroplasts? Which pigments have absorption spectra most similar to your results? Refer to your data and give exact values.
+* Would you expect the absorption spectra to be the same for all the spinach and all the algae? Why or why not?
+* Why is it important to have the ethanol blank in this study? What is the purpose of the blank in spectrophotometry?
