@@ -15,17 +15,16 @@ knitr::opts_chunk$set(echo = TRUE,fig.width = 5, fig.height = 3)
 Be able to...
 
 * Create code that you will understand in the future (i.e. by including comments)
-* Calculate summary statistics for various subsets of data (using dplyr in R)
+* Calculate mean and standard deviation (using dplyr in R)
 * Plot line graphs (using ggplot)
-* Plot different subsets of data together (colors in ggplot)
-* Compare two datasets (using a t-test in R)
+* Compare two datasets statistically (using a t-test in R)
 
 
 ## 1. Getting Started
 
 **Make a new project in a new directory and open a new script.**
 
-Begin by loading all the libraries you need. In this case, we will be using `ggplot2` to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
+Begin by loading all the libraries you will need. In this case, we will be using `ggplot2` to make our graphs. We are also entering data into Google Sheets, so we will need `gsheet` to pull that data into R. 
 
 * Copy the comment lines into your script
 * Enter the necessary code based on the previous lab and your R script from Lab A1. **If there are no code instructions then look at your Lab A1 materials**
@@ -68,12 +67,12 @@ Once we have our variables, it is always good to check to make sure the data was
 head(snail_data)
 ```
 
-**These are column names. You will use them to analyze and plot the data.** 
+**These are the column names of your raw data. Use these to analyze and plot the data.** 
 
 * `exp` is the experiment number
 * `group` is your group number
 * `generation` is the number of generations from the beginning (0,1,2,3)
-* `snailcolor` is camouflaged or obvious (white or red)
+* `snailcolor` is white or red
 * `snails` is the number of snails
 
 You can also see the column names (i.e. the variables) by using the `colnames` function.
@@ -81,11 +80,11 @@ You can also see the column names (i.e. the variables) by using the `colnames` f
 colnames(snail_data)
 ```
 
-## 3. Find the average snail count in groups of data
+## 3. Find the averages and standard deviations of the snail populations over time 
 
-We are interested in differences in population size between red and white snails over time (`snailcolor`), between different generations (`generation`), and between experiments (`exp`). To graph the average snail population size over time, you first need to calculate the averages for each snail type at each generation time for each experiment. We want to take the average of the data for each experiment / generation / color combination. 
+We want to compare the population size (`snails`) between red and white snails (`snailcolor`), over generations (`generation`), and experiments (`exp`). To show these differences, we need to graph the mean of the snail populations over time.  We do this by calculating the mean for each snail type at each generation for each experiment. To do this, we need to group the data into appropriate categories.  Since we are looking for the mean snail population at each generation for each color for both experiments, we will group our data based on experiment / generation / color combination. 
 
-We will use the `group_by` function from the `dplyr` package to create a new variable where each subset of data is labeled. Tell `group_by` the name of the data you want to divide into subsets, followed by the columns you want to include.
+To do this, we will use the `group_by` function from the `dplyr` package to create a new variable where each subset of data is labeled. Tell `group_by` the name of the data you want to divide into subsets, followed by the columns you want to include.
 
 ```{r gb}
 # Group the snail_data variable by exp, generation, and snailcolor
@@ -98,22 +97,35 @@ Next we calculate the mean for each group, and put this into a new variable `sna
 ```{r sm}
 # Calculate the mean number of snails for each group using the summarise function
 # by giving the name of the data you want to summarize (`grouped_snail_data`)
-# and that you want the mean value of the snail counts (labeled as `snails`).
+# and that you want the mean value of the snail counts (`snails`)
 
 snail_data_means <- summarise(grouped_snail_data,mean=mean(snails))
 ```
 
-Click on the `snail_data_means` variable in the in the R environment (top right). What are your mean values for the data? Do they make sense?
+Click on the snail_data_means variable in the in the R environment (top right). What are your mean values for the data? Make sure they make sense before continuing.
 
+## 3b. Calculate the standard deviation of the means
+
+* The *standard deviation* is the average amount the individual data points differ from the overall mean. For example, if we saw red snail population totals of 6, 5, 3 and 5 we would have a low standard deviation since all the data is close to the mean. However, if we had red snail total of 2, 0, 16 and 12 the standard deviation would be high since all of the data is far from the mean. 
+
+* Standard deviation is calculated in R using the function `sd`.
+
+```{r sm2}
+# Remake your table of means so it includes standard deviation
+# and store the new table as the variable snail_data_means_sd
+snail_data_means_sd <- summarise(grouped_snail_data,mean = mean(snails), stdev = sd(snails))
+
+```
+Click on the snail_data_means_sd variable in the R environment.  What are your standard deviation values for the data?  Make sure to reference this information when writing your report. 
 
 ## 4. Plot your data from Experiment 1
 
 ### 4a. Subset your data from Experiment 1
 
-Just like last time, we are going to use `ggplot` to graph the data. (Remember, `ggplot2` is a package you load and `ggplot` is the function you use for graphing).
+We will use `ggplot` to graph the mean and standard deviation for Experiment 1. (Remember, `ggplot2` is a package you load and `ggplot` is the function you use for graphing).
 
-* Filter the mean data variable (`snail_data_means`) for just Experiment 1 (otherwise, you would graph both the data from all experiments, making a very confusing graph to look at).
-* Assign the filtered data to a new variable named `snail_data_means_exp1`.
+* First, filter your data variable that contains the mean and standard deviation (`snail_data_means_sd`) for just Experiment 1 (otherwise, you would graph both the data from all experiments, making a very confusing graph to look at).
+* Assign the filtered data to a new variable named `snail_data_means_sd_exp1`.
 
 ```{r filt}
 # Filter data to include only means for Experiment 1 (exp==1). 
@@ -122,12 +134,12 @@ Just like last time, we are going to use `ggplot` to graph the data. (Remember, 
 
 ```{r filt2, echo=FALSE}
 # Filter data to include only averages for exp 1
-snail_data_means_exp1 <- filter(snail_data_means,exp==1)
+snail_data_means_exp1 <- filter(snail_data_means_sd,exp==1)
 ```
 
 ### 4b. Create the base layer of your plot and add points
 
-* Use your new filtered dataset (`snail_data_means_exp1`)
+* Use your new filtered dataset (`snail_data_means_sd_exp1`)
 * Add `color` to the `aes` function. The `color` variable separates the data based on `snailcolor` and then plots these separately on the same graph (in different colors!). 
 
 ```{r plot1}
@@ -137,7 +149,7 @@ ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor)) + geo
 
 ### 4c. Add a line to your plot to connect points
 
-The function to add a line is `geom_line()` and it is added to the ggplot command just like you add `geom_point()`.
+The function to add a line is `geom_line()` and it is added to the ggplot command just like you added `geom_point()`.
 
 ```{r plot}
 # Add a line to the plot
@@ -150,35 +162,61 @@ ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
 
 ```
 
-Note: `geom_line()` and `geom_point()` are followed by empty parentheses because they are functions. Functions must be able to accept arguments (e.g. the name of a dataset). These arguments need to go in the parentheses associated with the function. In this case, these functions do not have additional arguments, but we will see ones that do.
+Note: `geom_line()` and `geom_point()` are followed by empty parentheses because they are functions. Functions must be able to accept arguments (e.g. the range of the data you would like to show). These arguments need to go in the parentheses associated with the function.
 
 ### 4d. Add labels to your plot and change axis titles 
 
-Label the axes using `scale_x_discrete` and `scale_y_continuous` like you did in Lab 1, Section 5b. Use `name=" "` to name the x and y axes. Label the legend using ` + labs(color="Snail Color") `.
+Label the axis by adding the function `scale_x_discrete` and `scale_y_continuous` after your code like you did in Lab 1, Section 5b. Use `name=" "` to name the x and y axis. Label the legend using ` + labs(color="Snail Color") `. Also, in  `scale_y_continuous` add an argument `limits = c(0,50)` to make sure your y-axis starts at 0 and stops at 50. Note, the maximum for your y-axis may not be 50.
+
 
 ```{r plot3a}
-#Label your plot and change axes titles
+#Label your plot, change axis titles, limit range of y axis
 ```
 
 ```{r plot3, echo=FALSE}
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
-  geom_line()+geom_point()+
-  scale_x_discrete(name="Generation") + scale_y_continuous(name="Mean") + labs(color="Snail Color")
+ggplot(snail_data_means_sd_exp1, aes(x=generation, y=mean, color=snailcolor))+
+  geom_line()+
+  geom_point()+
+  scale_x_discrete(name="Generation") + 
+  scale_y_continuous(name="Mean", limits = c(0,50))+
+  labs(color="Snail Color")
 
 ```
 
-**Save this plot as Lab1_Experiment1 so that you can turn it in with your lab report.**
+### 4e. Add standard deviation bars to your plot
 
+These graphs do not yet show the variance in your class's data like your box plots from your last lab report did. To show variation of our data in our line graphs, we add standard deviation bars to our graphs by adding a layer using `geom_errorbar`
+
+* `geom_errorbar` draws an error bar that has an upper and lower value. In this case, the upper value is the mean + the standard deviation and the lower value is the mean - the standard deviation. 
+* Add ` + geom_errorbar(aes(ymin=mean+stdev, ymax=mean-sd))` to your ggplot command.
+
+```{r sd, eval=FALSE}
+# Add the error bars to the plot using geom_errorbar
+
+```
+
+```{r plot0, echo=FALSE, fig.show = 'hide'}
+ggplot(snail_data_means_sd_exp1, aes(x=generation, y=mean, color=snailcolor))+
+  geom_line()+
+  geom_point()+
+  scale_x_discrete(name="Generation") + 
+  scale_y_continuous(name="Mean", limits = c(0,50))+
+  labs(color="Snail Color")+
+  geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))
+
+```
+Examine your standard deviation bars visually.  Do they overlap or are they far apart? Does this indicate your means are similiar to each other?  Make sure to consider this as you write your lab report.
+
+**Save this plot as Lab1_Experiment1 so that you can turn it in with your lab report.**
 
 ## 5. Plot your data from Experiment 2
 
 * Repeat everything you did for Experiment 1 for Experiment 2.
 * Make sure your axis and legend titles are correct.
-* In your `scale_y_continuous` add an argument `limits = c(0,50)` to make sure your y-axis starts at 0. Note, the maximum for your y-axis may not be 50.
+
 
 ```{r plot4a}
 # Filter data to include only means for Experiment 2 and name this variable snail_data_means_exp2
-
 # Graph Experiment 2 data using the same commands you used in Section 4.
 ```
 
@@ -195,23 +233,20 @@ ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+
 
 **Save this plot as Lab1_Experiment2 so that you can turn it in with your lab report.**
 
-Take a look at the scale of your plots. In many cases, your Experiment 2 data will have a much larger y-axis than your Experiment 1 data. Why do you think this is? 
-Note that these graphs do not show the variance in the data. We will show you how to add error bars in future labs. 
 
+## 6. Compare number of snails in different groups using a statistical test
 
-## 6. Compare number of snails in different groups
-
-Now that we have examined our data visually, we are interested in knowing if the number of snails of each color differs at the end of the experiment. To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will go back to the original data set (`snail_data`). 
+Now that we have examined our data visually, we are interested in knowing if the number of snails of each color has a statistically significant difference at the end of the experiment (generation 3). To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will use our original data set (`snail_data`) since the t-test needs to know hoe much variation is in the data. 
 
 First we filter our white and red snails from Generation 3 in both the Experiments 1 and 2.
 Use the command from `Red1` for `Red2`, `White1`, and `White2`.
 
 ```{r }
 # Subset snail data by generation, experiment and snail color and store it in the Red1 variable.
-# Red1 contains just data from exp 1 red snails
+# Red1 contains just data from exp 1, generation 3, red snails
 Red1 <- filter(snail_data, exp==1 & generation==3 & snailcolor=="red")
 
-# White1 contains just data from exp 1 white snails
+# White1 contains just data from exp 1, generation 3, white snails
 # (write the command for White1 here)
 
 # Red2 contains just data from exp 2 red snails
@@ -250,6 +285,7 @@ The output from `t.test` gives you a lot of information. For this class, we are 
 
 Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for 20 experiments where the null is true, one of them will probably appear as if the null is false (1/20 = 5%). Because you have some variance in your data you need to allow for some probability of being wrong. If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis. 
 
+INPUT THE PARAGRAPH ABOUT HOW TO REJUECT OR FAIL TO REJECT A NULL HYP HERE
 
 ## Lab 2 Report Submission
 Turn in a hard copy of your lab report that includes the following:
