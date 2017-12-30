@@ -285,7 +285,7 @@ The output from `t.test` gives you a lot of information. For this class, we are 
 
 Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for 20 experiments where the null is true, one of them will probably appear as if the null is false (1/20 = 5%). Because you have some variance in your data you need to allow for some probability of being wrong. If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis. 
 
-INPUT THE PARAGRAPH ABOUT HOW TO REJUECT OR FAIL TO REJECT A NULL HYP HERE
+INPUT THE PARAGRAPH ABOUT HOW TO REJUECT OR FAIL TO REJECT A NULL HYPothesis HERE
 
 ## Lab 2 Report Submission
 Turn in a hard copy of your lab report that includes the following:
