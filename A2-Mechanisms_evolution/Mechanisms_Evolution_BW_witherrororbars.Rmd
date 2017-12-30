@@ -134,7 +134,7 @@ We will use `ggplot` to graph the mean and standard deviation for Experiment 1. 
 
 ```{r filt2, echo=FALSE}
 # Filter data to include only averages for exp 1
-snail_data_means_exp1 <- filter(snail_data_means_sd,exp==1)
+snail_data_means_sd_exp1 <- filter(snail_data_means_sd,exp==1)
 ```
 
 ### 4b. Create the base layer of your plot and add points
@@ -143,7 +143,7 @@ snail_data_means_exp1 <- filter(snail_data_means_sd,exp==1)
 * Add `color` to the `aes` function. The `color` variable separates the data based on `snailcolor` and then plots these separately on the same graph (in different colors!). 
 
 ```{r plot1}
-# Make your plot for the snail_data_means_exp1 data
+# Make your plot for the snail_data_means_sd_exp1 data
 ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor)) + geom_point()
 ```
 
@@ -205,7 +205,7 @@ ggplot(snail_data_means_sd_exp1, aes(x=generation, y=mean, color=snailcolor))+
   geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))
 
 ```
-Examine your standard deviation bars visually.  Do they overlap or are they far apart? Does this indicate your means are similiar to each other?  Make sure to consider this as you write your lab report.
+Examine your standard deviation bars visually.  Do they overlap or are they far apart? Does this indicate your means are different or similar to each other?  Make sure to consider this as you write your lab report.
 
 **Save this plot as Lab1_Experiment1 so that you can turn it in with your lab report.**
 
@@ -221,9 +221,9 @@ Examine your standard deviation bars visually.  Do they overlap or are they far 
 ```
 
 ```{r plot4, echo=FALSE}
-snail_data_means_exp2 <- filter(snail_data_means,exp==2)
+snail_data_means_sd_exp2 <- filter(snail_data_means_sd,exp==2)
 
-ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+
+ggplot(snail_data_means_sd_exp2, aes(x=generation, y=mean, color=snailcolor))+
   geom_line()+geom_point()+
   scale_x_discrete(name="Generation") + 
   scale_y_continuous(name="Mean", limits = c(0,50)) + 
@@ -236,22 +236,22 @@ ggplot(snail_data_means_exp2, aes(x=generation, y=mean, color=snailcolor))+
 
 ## 6. Compare number of snails in different groups using a statistical test
 
-Now that we have examined our data visually, we are interested in knowing if the number of snails of each color has a statistically significant difference at the end of the experiment (generation 3). To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will use our original data set (`snail_data`) since the t-test needs to know hoe much variation is in the data. 
+Now that we have examined our data visually, we are interested in knowing if the red and white snail populations are statistically different at the end of the experiment (generation 3). To compare red and white snail populations at generation 3, you will run a *t*-test. To run a *t*-test in R, we will use our original data set (`snail_data`) since the t-test takes into account the means of the data it is comparing, the sample sizes of the data it is comparing aqnd the variation of the data it is comparing. 
 
-First we filter our white and red snails from Generation 3 in both the Experiments 1 and 2.
+First we filter our white and red snails from Generation 3 in both Experiments 1 and 2.
 Use the command from `Red1` for `Red2`, `White1`, and `White2`.
 
 ```{r }
 # Subset snail data by generation, experiment and snail color and store it in the Red1 variable.
-# Red1 contains just data from exp 1, generation 3, red snails
+# Red1 contains just data from experiment 1's, generation 3, red snails
 Red1 <- filter(snail_data, exp==1 & generation==3 & snailcolor=="red")
 
-# White1 contains just data from exp 1, generation 3, white snails
+# White1 contains just data on experminet 1's, generation 3, white snails
 # (write the command for White1 here)
 
-# Red2 contains just data from exp 2 red snails
+# Red2 contains just data from experiment 2's, generation 3 red snails
 
-# White2 contains just data from exp 2 white snails
+# White2 contains just data from exp 2's, generation 3, white snails
 ```
 
 ```{r filtercol, echo=FALSE}
@@ -266,7 +266,7 @@ Now that we have separate variables for each subset of data, we can run our *t*-
 
 ```{r }
 # My null hypothesis is that
-# red and white snail numbers are the same at the third generation of experiment 1.
+# red and white snail populations are the same at the third generation of experiment 1.
 
 # Oystercatcher_ttest
 t.test(Red1$snails, White1$snails)
@@ -280,12 +280,23 @@ t.test(Red1$snails, White1$snails)
 # Driftlog_ttest
 t.test(Red2$snails, White2$snails)
 ```
-
 The output from `t.test` gives you a lot of information. For this class, we are going to focus on the p-value. A p-value is the probability of getting data different from the observed data given that the null hypothesis is true.
 
-Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for 20 experiments where the null is true, one of them will probably appear as if the null is false (1/20 = 5%). Because you have some variance in your data you need to allow for some probability of being wrong. If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis. 
+Imagine you are willing to accept a 5% probability that you reject the null hypothesis if it is really true. That's like saying for every 20 experiments where the null hypthesis is true, one of them will probably appear as if the null is false (1/20 = 5%).
 
-INPUT THE PARAGRAPH ABOUT HOW TO REJUECT OR FAIL TO REJECT A NULL HYPothesis HERE
+Because you have some variance in your data you need to allow for some probability of being wrong. __If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis.__
+
+**Reporting independent samples T-test data
+
+To report results– include three main ideas:
+* Test type and use
+“An independent-samples t-test was conducted to compare red and white snail populations after three generations of predation from oyster catchers. 
+* Significant differences between conditions
+“There was a significant (not a significant) difference in red (mean=  ) and white snail (mean=  ) populations after three generations of predation from oyster catchers; p =  ”
+* Describe your results in simple words explaining your result
+“These results suggest that snail color really does have an effect on oyster catcher predation.
+
+Make sure to write these three sentences in your results for your oyster catcher _and_ your drift log experiment. 
 
 ## Lab 2 Report Submission
 Turn in a hard copy of your lab report that includes the following:
@@ -294,6 +305,6 @@ Turn in a hard copy of your lab report that includes the following:
 2. Line graph of Experiment 1 means from Step 4d
 3. Line graph of Experiment 2 means from Step 5
 4. Results of your t-tests for both experiments from Step 6
-5. Explain why you rejected or failed to reject your null hypotheses based on your t-test results and explain the processes that influenced both experiments  (4-5 sentences).
+5. Explain why you rejected or failed to reject your null hypotheses based on your t-test results and explain the processes that influenced both experiments using syntax above.
 6. Your code. Code should be organized, include good comments, and include only code that works and does not produce errors.
 
