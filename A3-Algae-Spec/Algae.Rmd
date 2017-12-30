@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 
 ## Goals for Lab 2
 
-Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotometer you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
+Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done you will be able to compare your three algae species spectromoter outpouts at once. 
 
 Be able to...
 
@@ -23,14 +23,13 @@ Be able to...
   
 ## 1. Getting Started
 
-### 1a. Put data in long form on Google Sheets
+### 1a. Put data in long form on Google Sheets and adjust share it with your team
 
-Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). Remember that there can only be one datapoint per line. You should have 1 header row and 93 rows of data total.
+Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). You should have 1 header row and 93 rows of data total.
 
 Change the permission settings to "Anyone with the link can view." Click on the blue Share button in the top right. Click "Get shareable link."  Click on the drop-down menu and select "More..." Select "On - Anyone with the link." If you don't change the sharing settings, you will get an error when you try to use the gsheet2tbl() function. This is because RStudio doesn't have the permission to access the Google Sheet data.
 
 Copy the link from your Google Sheet to use in RStudio.
-
 
 ### 1b. Load the packages you need
   
@@ -90,7 +89,7 @@ Just like last time, you are going to use `ggplot` to graph your algae data. We 
 
 _Refer to Lab 2, Parts 4b and 4d if you need help._
 
-### 3a. Create the base layer of your plot
+### 3a. Create the base layer of your plot with correct labels
 
 First identify the variables (by looking at the column names)
 
@@ -107,8 +106,6 @@ First identify the variables (by looking at the column names)
 ```{r plot1a, echo=FALSE,fig.show = 'hide'}
 ggplot(algae_data, aes(x=Wavelength, y=Absorption, color=Algae))
 ```
-
-### 3b. Add your data and labels to the plot (using `geom_point`)
 
 ```{r plotcomment2}
 # Add datapoints and labels to the plot
@@ -138,6 +135,6 @@ Turn in a hard copy of your lab report that includes the following:
 4. Answers to the following questions (at least one full page, double-spaced):
 
 * What wavelengths are most strongly (and most poorly) absorbed by which of the algae extracts? Directly reference your data and explain why you chose your answer.
-* Does your data match the known absorption spectra of different pigments found in chloroplasts? Which pigments have absorption spectra most similar to your results? Refer to your data and give exact values.
-* Would you expect the absorption spectra to be the same for all the spinach and all the algae? Why or why not?
+* Does your data match the known absorption spectra of different pigments found in chloroplasts (e.g. chlorophyll a, chlorophyll b, anthocyanin and carotenoids)? Which pigments have absorption spectra most similar to your results? Refer to your data and give exact values.
+* Would you expect the absorption spectra to be the same for all the spinach and all the algae?  Why or why not? Consider where these organisms are found in the wild.  
 * Why is it important to have the ethanol blank in this study? What is the purpose of the blank in spectrophotometry?
