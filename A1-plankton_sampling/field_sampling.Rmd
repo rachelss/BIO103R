@@ -1,5 +1,5 @@
 ---
-title: "Using R in field sampling -- BIO 104 Lab A1. Species Diversity Report"
+title: "Lab A1: Species Diversity "
 output:
   pdf_document: default
   html_document: default
@@ -7,10 +7,12 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 ```
 
 ## Goals for Lab 1
+
+At the end of this lab you should be able to...
 
 * Import data into R
 * Save data in R as variables
@@ -20,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1. Getting Started
 
-You will be using **R** for data analysis this semester. **R** is a versatile, free data handling software widely-used by scientists. Here are some great reasons to use **R**:
+You will be using **R** for data analysis this semester. **R** is a versatile, free, data-handling software widely-used by scientists. Here are some great reasons to use **R**:
 
 * You write down the instructions (code) to do your data analysis so you will remember how it's done
 * Instantly rerun your analysis
@@ -31,7 +33,7 @@ More great information on R is at [http://www.datacarpentry.org/R-ecology-lesson
 
 
 ### 1a. Using RStudio
-Log in to the R Studio server at https://celsrs.uri.edu/ . This will enable you to run the R software to analyze your data.
+Log in to the R Studio server at https://celsrs.uri.edu/ . This server will enable you to run the R software to analyze your data.
 
 You will get your login information from your TA. Your password is the same as username.
 
@@ -42,12 +44,13 @@ You will get your login information from your TA. Your password is the same as u
     + `New Directory` and `Empty Project` 
     + `Directory name:  FieldSampling`
     + Leave the Subdirectory as the default:  ~
-![](RStudioFile.png)
+    
+![](../A1-field_sampling/RStudioFile.png)
                                   
 * Select from top left corner:  
     + `File` - `New File` - `R Script`
   
-![](RStudioOverview.png)
+![](../A1-field_sampling/RStudioOverview.png)
 
 Making a new project and script will give you four windows open in R: 
 a *script* to help you keep track of the commands you are entering, 
@@ -58,7 +61,7 @@ a *file* window.
 
 ## 2. How to get your data into R so you can use it
 
-Last week you calculated the diversity index for each plot within each of four site types. A diversity index allows you to understand the variation in diversity among site types.
+Last week you calculated the diversity index for your plankton samples. A diversity index allows you to understand the variation in diversity among site types.
 The following lines of code will allow you to get your data (the class data about the diversity of each plot) into R directly from Google Sheets.
 
 ### 2a. Make the tools you need available in R.
@@ -69,18 +72,20 @@ The tools you need are found in "packages". Packages are like books from the lib
 library(gsheet)
 ```
 
-**Type the code (from the grey boxes) into the SCRIPT window of RStudio. Run each line using the Run button (top right of the SCRIPT window in RStudio)** ![](RStudioRun.png)
+**Type the code (from the grey boxes) into the SCRIPT window of RStudio. Run each line using the Run button (top right of the SCRIPT window in RStudio)**
+
+![](../A1-field_sampling/RStudioRun.png)
 
 ### 2b. Tell R where to get your data.
 
 Assign the web address of the data (the "https" address) to a variable (here our variable is called "url" for "uniform resource locator". This is the term for an address on the web (you can name your variable anything though). You assign a number or word or data to a variable using `<-` (which makes something that looks like an arrow). The variable name goes on the left of the arrow and the information goes on the right. 
 
 ```{r echo=FALSE}
-url <- 'https://docs.google.com/spreadsheets/d/1_FtL2E935fvANST8JMP50QVQzIVoaZgXyNpLZnVRW-k'
+url <- 'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
 ```
 
 ```{r eval=FALSE}
-url <- 'https://docs.google.com/spreadsheets/d/15_Oba64U8UsV9CdqrBYNSTTS5YpTARmRrBKDiQwELlk'
+url <- 'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
 ```
 
 ### 2c. Assign the data to a variable
@@ -106,7 +111,7 @@ library(gsheet)
 
 #assign the website address for the data to a variable using an arrow <-
 # "variable" <- "website address for data"
-url<-'https://docs.google.com/spreadsheets/d/15_Oba64U8UsV9CdqrBYNSTTS5YpTARmRrBKDiQwELlk'
+url<-'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
 
 #load the data from google sheets
 # "variable" <- "command to work on" (data from last line)
@@ -134,8 +139,9 @@ library(ggplot2)
 * run this plot command
 
 ```{r }
-ggplot(diversitydata, aes(x=SiteType,y=Diversity))
+ggplot(diversitydata, aes(x=Tide,y=Diversity))
 ```
+
 **SAVE your work**. Save your code by clicking `File > Save`. **Name your file Lab1_YourName.rproj.** Your work will save to the server that we are using for this lab.  You will be able to access your work on this server from other computers, as long as you know the web address and your username and password.
 
 
@@ -146,7 +152,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))
 
 ```{r }
 #insert comment here
-ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
+ggplot(diversitydata, aes(x=Tide,y=Diversity))+
   geom_point()
 ```
 
@@ -165,7 +171,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 
 ```{r }
 #insert comment here
-ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
+ggplot(diversitydata, aes(x=Tide,y=Diversity))+
   geom_point()+
   geom_boxplot()
 ```
@@ -181,17 +187,18 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 
 ### 5a. Reorder data on the X-axis
 
-If you want to make particular comparisons, such as between mowed sites, you might want to have your data in a particular order.
+In some cases you might want to have your data in a particular order.
 
-* plot the two mowed sites on the left and the two unmowed sides on the right side of the plot
+* plot outgoing on the left and incoming on the right side of the plot
 * `scale_x_discrete` allows you to change all the information on the x axis
   + limits specifies the range of data on the x axis - since the data are categorical not continuous (e.g. from 1-10) you put the items in a list
 
 ```{r }
 #insert comment here
-ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
+ggplot(diversitydata, aes(x=Tide,y=Diversity))+
+  geom_point()+
   geom_boxplot()+
-  scale_x_discrete(limits=c("SuM", "ShM", "SuNM", "ShNM"))
+  scale_x_discrete(limits=c("outgoing", "incoming"))
 ```
 
 
@@ -200,13 +207,12 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 * use `scale_x_discrete` to relabel the category names to something more descriptive and to specify the overall x axis name
 
 ```{r }
-ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
+ggplot(diversitydata, aes(x=Tide,y=Diversity))+
   geom_boxplot()+
-  scale_x_discrete(limits=c("SuM", "ShM", "SuNM", "ShNM"), 
-                   labels=c("SuM" = "Sun Mow", "ShM" = "Shade Mow",
-                            "SuNM" = "Sun Not Mow", 
-                            "ShNM" = "Shade No Mow"), 
-                   name ="Conditions at site")
+  scale_x_discrete(limits=c("outgoing", "incoming"), 
+                   labels=c("outgoing" = "Outgoing Tide",
+                            "incoming" = "Incoming Tide"), 
+                   name ="Tide at site")
 
 ```
 
@@ -218,7 +224,7 @@ ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
 
 ### 5d. Look at a subset of data
 
-If you want to show only data from the two sunny sites, then make a new variable (here called 'SunnyOnly') containing these data
+If you want to show only data from the Regular Sampling Site (RSS), then make a new variable (here called 'RSS') containing these data
 
 * First load the `dplyr` library to provide a method of filtering the data.
 
@@ -226,32 +232,36 @@ If you want to show only data from the two sunny sites, then make a new variable
 library(dplyr)
 ```
 
-* Then `filter` the data where the value in the SiteType column is either SuNM or SuM (the vertical bar indicates '')
+* Then `filter` the data where the value in the Location column is RSS
 
 ```{r }
-SunnyOnly <- filter(diversitydata,SiteType=="SuNM" | SiteType=="SuM")
+RSS <- filter(diversitydata,Location=="RSS")
 ```
 
 * Now plot this new dataset
 
 ```{r }
-ggplot(SunnyOnly, aes(x=SiteType, y=Diversity)) +
+ggplot(RSS, aes(x=Tide, y=Diversity)) +
   geom_boxplot()+
-  scale_x_discrete(limits=c("SuM", "SuNM"),
-                   labels=c("SuM" = "Sun Mow", "SuNM" = "Sun No Mow"), 
-                   name ="Conditions at site")
+  scale_x_discrete(limits=c("outgoing", "incoming"), 
+                   labels=c("outgoing" = "Outgoing Tide",
+                            "incoming" = "Incoming Tide"), 
+                   name ="Tide at site")
 ```
+
 **Turn in this final boxplot of the data.**
 **Turn in your diversity summary table.**
 
 ## 6. Homework Assignment
 
-* Make a boxplot comparing diversity among terrestrial biomes of the United States.
-* Data are available at https://docs.google.com/spreadsheets/d/1KAur7rjQtw3zN1bEQR_xXr0JRS3yn1nnvdrzQu6gWaw 
+The samples you worked with are part of one of the world's longest datasets of regularly collected plankton. In class you examined diversity of just two samples in January 2018. Even though many groups calculated the diversity of this sample, each count really only represents one estimate of the value for this sample. To examine diversity accurately you will use samples from Narragansett Bay collected in December and January going back to 1999.
+
+* Make a boxplot comparing diversity during incoming and outgoing tides in December and January.
+* Data are available at https://docs.google.com/spreadsheets/d/1bKWol4lJ_XrMIK3TqHcYvknel2mHsmuI8Qk5-sRPxbM
 * Create a new R script
 * Load the libraries
 * Load your data
 * Make a boxplot similar to the Diversity index plot you made in class
-* Select three biomes and make a Diversity index boxplot for just those biomes.
+* Select one location and make a Diversity index boxplot for just that location.
 
-**Write a two sentence statement describing differences in diversity among the states you selected.**
+**Write a two sentence statement describing the difference in diversity between tides**
