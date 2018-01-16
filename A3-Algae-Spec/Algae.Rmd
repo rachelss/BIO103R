@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 ```
 
 
-## Goals for Lab 2
+## Goals for Lab 3
 
 Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done, your graph will look very similar to the output of the spectrophotometer you used during the lab. However, you will be able to visualize the similarities and differences of all three algae species at once to make easy comparisons. 
 
