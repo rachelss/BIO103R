@@ -25,7 +25,11 @@ Be able to...
 
 ### 1a. Put data in long form on Google Sheets
 
-Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). Remember that there can only be one datapoint per line. Copy the link from your Google Sheet to use in this lab.
+Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). Remember that there can only be one datapoint per line. You should have 1 header row and 93 rows of data total.
+
+Change the permission settings to "Anyone with the link can view." Click on the blue Share button in the top right. Click "Get shareable link."  Click on the drop-down menu and select "More..." Select "On - Anyone with the link." If you don't change the sharing settings, you will get an error when you try to use the gsheet2tbl() function. This is because RStudio doesn't have the permission to access the Google Sheet data.
+
+Copy the link from your Google Sheet to use in RStudio.
 
 
 ### 1b. Load the packages you need
