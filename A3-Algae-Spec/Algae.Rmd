@@ -1,8 +1,8 @@
 ---
 title: "BIO104 Lab A3. Photosynthesis and Absorption Spectrum of Algae"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
   
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
 
 ## Goals for Lab 3
 
-Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done you will be able to compare your three algae species spectromoter outpouts at once. 
+Today you will make a graph that illustrates the absorption rates of your algae samples at different wavelengths. When you are done you will be able to compare your three algae species spectrophotometer outputs at once. 
 
 Be able to...
 
@@ -23,9 +23,9 @@ Be able to...
   
 ## 1. Getting Started
 
-### 1a. Put data in long form on Google Sheets and adjust share it with your team
+### 1a. Put data in long form on Google Sheets and share it with your team
 
-Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). You should have 1 header row and 93 rows of data total.
+Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `Algae` (1,2,3), `Wavelength` (400 to 700, by tens), and `Absorption` (what you measured). Remember that there can only be one datapoint per line. You should have 1 header row and 93 rows of data total.
 
 Change the permission settings to "Anyone with the link can view." Click on the blue Share button in the top right. Click "Get shareable link."  Click on the drop-down menu and select "More..." Select "On - Anyone with the link." If you don't change the sharing settings, you will get an error when you try to use the gsheet2tbl() function. This is because RStudio doesn't have the permission to access the Google Sheet data.
 

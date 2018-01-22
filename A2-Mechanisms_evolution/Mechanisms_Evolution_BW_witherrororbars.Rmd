@@ -144,7 +144,7 @@ snail_data_means_sd_exp1 <- filter(snail_data_means_sd,exp==1)
 
 ```{r plot1}
 # Make your plot for the snail_data_means_sd_exp1 data
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor)) + geom_point()
+ggplot(snail_data_means_sd_exp1, aes(x=generation, y=mean, color=snailcolor)) + geom_point()
 ```
 
 ### 4c. Add a line to your plot to connect points
@@ -157,7 +157,7 @@ The function to add a line is `geom_line()` and it is added to the ggplot comman
 
 ```{r plot2a, echo=FALSE}
 # Add the line and points to your plot
-ggplot(snail_data_means_exp1, aes(x=generation, y=mean, color=snailcolor))+
+ggplot(snail_data_means_sd_exp1, aes(x=generation, y=mean, color=snailcolor))+
   geom_line()+geom_point()
 
 ```
