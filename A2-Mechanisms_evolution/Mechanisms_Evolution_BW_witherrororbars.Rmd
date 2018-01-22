@@ -236,7 +236,7 @@ ggplot(snail_data_means_sd_exp2, aes(x=generation, y=mean, color=snailcolor))+
 
 ## 6. Compare number of snails in different groups using a statistical test
 
-Now that we have examined our data visually, we are interested in knowing if the red and white snail populations are statistically different at the end of the experiment (generation 3). To compare red and white snail populations at generation 3, you will run a *t*-test. To run a *t*-test in R, we will use our original data set (`snail_data`) since the t-test takes into account the means of the data it is comparing, the sample sizes of the data it is comparing aqnd the variation of the data it is comparing. 
+Now that we have examined our data visually, we are interested in knowing if the number of snails of each color has a statistically significant difference at the end of the experiment (generation 3). To compare the number of each color, you will run a *t*-test. A *t*-test is a statistical analysis that compares the means of two groups to see if they are statistically different from one another. To run a *t*-test in R, we will use our original data set (`snail_data`) since the t-test needs to know hoe much variation is in the data. 
 
 First we filter our white and red snails from Generation 3 in both Experiments 1 and 2.
 Use the command from `Red1` for `Red2`, `White1`, and `White2`.
@@ -246,7 +246,7 @@ Use the command from `Red1` for `Red2`, `White1`, and `White2`.
 # Red1 contains just data from experiment 1's, generation 3, red snails
 Red1 <- filter(snail_data, exp==1 & generation==3 & snailcolor=="red")
 
-# White1 contains just data on experminet 1's, generation 3, white snails
+# White1 contains just data on experiment 1's, generation 3, white snails
 # (write the command for White1 here)
 
 # Red2 contains just data from experiment 2's, generation 3 red snails
@@ -265,8 +265,8 @@ Now that we have separate variables for each subset of data, we can run our *t*-
 **What is your null hypothesis for the Experiment 1 data?**
 
 ```{r }
-# My null hypothesis is that
-# red and white snail populations are the same at the third generation of experiment 1.
+# My null hypothesis is that 
+# the numbers of red and white snails are the same at the third generation of experiment 1.
 
 # Oystercatcher_ttest
 t.test(Red1$snails, White1$snails)
@@ -286,7 +286,7 @@ Imagine you are willing to accept a 5% probability that you reject the null hypo
 
 Because you have some variance in your data you need to allow for some probability of being wrong. __If your p-value is less than 0.05 you will reject the null hypothesis. If it is greater than 0.05 you cannot reject the null hypothesis.__
 
-**Reporting independent samples T-test data
+**Reporting independent samples t-test data
 
 To report results– include three main ideas:
 * Test type and use
