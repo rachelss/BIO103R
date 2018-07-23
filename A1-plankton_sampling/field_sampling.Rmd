@@ -1,267 +1,477 @@
 ---
-title: "Lab A1: Species Diversity "
+title: BIO 104 Lab  A1. Species Diversity Report
+subtitle: Field Sampling Data Analysis & Presentation using R Software
+
 output:
+  word_document:
+          reference_docx: mystyles.docx
   pdf_document: default
   html_document: default
-  word_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Goals for Lab 1
 
-At the end of this lab you should be able to...
-
-* Import data into R
-* Save data in R as variables
+* Import data into **R**
+* Save data in **R** as variables
 * Plot diversity data as a scatterplot and a boxplot
 * Plot certain parts of your data
 
+<br>
 
 ## 1. Getting Started
 
-You will be using **R** for data analysis this semester. **R** is a versatile, free, data-handling software widely-used by scientists. Here are some great reasons to use **R**:
+You will be using **R** for data analysis this semester. **R** is a versatile, free data handling software widely-used by scientists. **R** is great for organizing data, analyzing data, and presenting data. 
 
-* You write down the instructions (code) to do your data analysis so you will remember how it's done
-* Instantly rerun your analysis
-* Make beautiful plots
-* Analyze your data in every possible way
+Here is some basic vocabulary you will need when using **R**.
 
-More great information on R is at [http://www.datacarpentry.org/R-ecology-lesson/00-before-we-start.html#why_learn_r](http://www.datacarpentry.org/R-ecology-lesson/00-before-we-start.html#why_learn_r)
+* **R script:** the lines of code that you are writing (filename.R)
+* **R project:** your **R** script, any variables you have created, and your current R environment (filename.Rproj)
+* **Variable:** a way to store your data for use in the **R** script. For example, if you type x=3 into **R**, then **R** now stores x (the variable) as the number 3.
+* **Package:** a set of functions/codes that you can load into your script (examples - gsheet, ggplot2)
+* **Function:** an action or calculation that you perform on your variables (examples - gsheet2tbl, subset, mean, library)
+* **Comment:** does not run as code, starts with #. You use comments to keep track of what your code is doing
+
+<br>
+
+More information on **R** is at [http://www.datacarpentry.org/R-ecology-lesson/00-before-we-start.html#why_learn_r](http://www.datacarpentry.org/R-ecology-lesson/00-before-we-start.html#why_learn_r).
 
 
-### 1a. Using RStudio
-Log in to the R Studio server at https://celsrs.uri.edu/ . This server will enable you to run the R software to analyze your data.
+### Helpful Hints
 
-You will get your login information from your TA. Your password is the same as username.
+*	Uppercase/lowercase matters!
+*	Spaces and empty lines do not matter in your code
+*	Do not use spaces in your variable names or file names (use _ or - or . )
+*	Links to GoogleSheets need to be in 'single quotes'
+*	`#`Comment your code so you know what's going on
+*	Store variables using `<-`
+*	Access the datapoints in a `variable` using `variable[]`
+
+##### Page Break
+
+**Log in to the R Studio server at https://celsrs.uri.edu/. **
+
+You will get your login information from your TA. Your password is the same as username.  
+
+<br>
+
 
 **Open RStudio and make a new project.**
 
-* Select from top left corner:  
-    + `File` - `New Project...`
-    + `New Directory` and `Empty Project` 
-    + `Directory name:  FieldSampling`
-    + Leave the Subdirectory as the default:  ~
-    
-![](../A1-field_sampling/RStudioFile.png)
-                                  
-* Select from top left corner:  
-    + `File` - `New File` - `R Script`
+Select from top left corner:  
+
+  * `File` > `New Project...`
+  * `New Directory` and `Empty Project` 
   
-![](../A1-field_sampling/RStudioOverview.png)
+  ![](newproject.png)
 
-Making a new project and script will give you four windows open in R: 
-a *script* to help you keep track of the commands you are entering, 
-a *console* where those commands are run, 
-an *environment* that show what data you have, and 
-a *file* window.
+  <br>
+  
+  * `Directory name:  FieldSampling`
+  * Leave the Subdirectory as the default:  ~
+  
+  ![](saveproject.png)
+                                  
+<br>
+
+Select from top left corner:  
+
+  * `File` > `New File` > `R Script`
+  
+  ![](newrscript.png)
+
+##### Page Break
+
+Creating a new project and script will give you four windows in **R**: 
+
+* **R script:** where you type your comments and code, and save your work
+*	**R environment:** where all your variables show up and are organized
+*	**R console:** where the code runs and the text output shows. Errors show here too!
+*	**Graphical output:** where your graphs will show.
+
+<br>
+
+  ![](rwindows.png)
+
+##### Page Break
 
 
-## 2. How to get your data into R so you can use it
+## 2. How to get your data into R
 
-Last week you calculated the diversity index for your plankton samples. A diversity index allows you to understand the variation in diversity among site types.
-The following lines of code will allow you to get your data (the class data about the diversity of each plot) into R directly from Google Sheets.
+Last week you calculated the Simpson diversity index for the plankton samples at each of four site types (GSO outgoing, GSO incoming, FOX outgoing, and FOX incoming). 
 
-### 2a. Make the tools you need available in R.
+A diversity index allows you to understand the variation in diversity among site types. The following lines of code will import your data (the class data about the diversity of each plot) directly into **R** from Google Sheets.
 
-The tools you need are found in "packages". Packages are like books from the library; packages are pre-written bundles of code that can perform the tasks we want. 
+<br>
 
-```{r }
+### 2a. Load the packages you need
+
+The tools you need are found in "packages". Packages are like books from the library: pre-written bundles of code that can perform the tasks we want. They contain functions and commands to perform analyses. Here, we will load the `gsheet` package. 
+
+Type the code (from the grey boxes) into the SCRIPT window of RStudio (top left). With your cursor on the line of code, click Run (top right of the SCRIPT window in RStudio). The line of code will show up in the R console window once it is run (bottom left). 
+
+<br>
+
+
+```{r lib}
 library(gsheet)
 ```
 
-**Type the code (from the grey boxes) into the SCRIPT window of RStudio. Run each line using the Run button (top right of the SCRIPT window in RStudio)**
+![](runR.png) 
 
-![](../A1-field_sampling/RStudioRun.png)
+##### Page Break
 
-### 2b. Tell R where to get your data.
 
-Assign the web address of the data (the "https" address) to a variable (here our variable is called "url" for "uniform resource locator". This is the term for an address on the web (you can name your variable anything though). You assign a number or word or data to a variable using `<-` (which makes something that looks like an arrow). The variable name goes on the left of the arrow and the information goes on the right. 
+### 2b. Tell R where your data is
 
-```{r echo=FALSE}
-url <- 'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
+Assign the link to your diversity data to the variable "`url`". 
+
+You store a number or word or data to a variable using `<-`.
+
+The variable name goes on the left of the arrow and the information goes on the right. Use the link for your section found on the homepage of the BIO104 Sakai site.
+
+<br>
+
+Replace the link with yours in this command. Make sure you put it in 'single quotes'!
+```{r load}
+url <- 'https://docs.google.com/spreadsheets/d/1mTQPw3GsqID_ay6YqdNISOOKIMb9HHeBpFu7EWFiGj8'
 ```
+Remember to click Run with your cursor on the line of code.
+Once you have Run this command, make sure your new variable shows up in the R environment window (top right).
 
-```{r eval=FALSE}
-url <- 'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
-```
+![](runurl.png)
 
-### 2c. Assign the data to a variable
+<br>
 
-In this case the data is contained in the variable `diversitydata`. The function `gsheet2tbl` gets the data from the website so that you can access it in R.
+### 2c. Load the data and store it as a variable
+
+Load the data from the spreadsheet (now stored as variable `url`). Use the function `gsheet2tbl` to get the data from the website for use in **R**. This function is from the `gsheets` package. Store the data as variable `diversitydata`.
 
 ```{r gsheet}
 diversitydata <- gsheet2tbl(url)
 ```
 
-* you will need to run each line separately (put the cursor on each line and click run)
-* the line was run correctly if you get the prompt (`>`) in the console window at the bottom of RStudio
-* view your data by clicking on the item in the Data window on the right side (my data is called `diversitydata` - yours may be named something else) - this will open a new tab above so you can look at the data
+
+* The line was run correctly if you get the prompt (`>`) in the R console window (bottom left)
+*	Make sure the `diversitydata` variable shows up in the R environment (top right)
+
+
+##### Page Break
+
+
+### 2d. Explore your data
+
+Click on the `diversitydata` variable in the R environment. The data stored in `diversitydata` will appear in the R script window (top left). It should look just like your spreadsheet data! 
+
+<br>
+
+![](exploredata.png)
+
+
+Click next to the `>` in the R console. 
+
+* Type **`diversitydata[1]`** into the R console and hit the Enter button on your keyboard. This is the first column of the data stored in `diversitydata`.
+*	Type **`diversitydata[2]`** into the R console and hit the Enter button on your keyboard. This is the second column of the data stored in `diversitydata`.
+
+<br>
+
+You may have noticed that R stored `diversitydata` as a table! Try accessing any datapoint in the table by typing:
+
+*	`diversitydata[row, column]`
+* For example: **`diversitydata[2,3]`**
+
+<br>
+
+What happens if you try to access a column that isn't in the variable `diversitydata`?
+
+* For example: **`diversitydata[2,7]`**
+
+You get an error! Errors are fine - they tell when something is not right in your code. Read the error and then try to fix it. There are only 3 columns in `diversitydata` and your command tried to access column 7.
+
+##### Page Break
+
 
 ## 3. Keep track of what your commands do
 
-As you work you are typing commands that you probably won't remember next week. 
-**Use the `#` symbol to explain your lines of code.** For example, rather than the plain code above your script might look like the following:
+As you work, you are typing commands that you probably won't remember next week. **Use the `#` symbol to explain your lines of code.** Anything that you type after the `#` will not run in your code. 
+
+<br>
 
 ```{r gsheet2, eval=FALSE}
-#load the package that allows use to access google sheets 
+#load the package that allows us to access google sheets 
 library(gsheet)
 
 #assign the website address for the data to a variable using an arrow <-
-# "variable" <- "website address for data"
-url<-'https://docs.google.com/spreadsheets/d/1HXZVAtbOke47md6rT_6B3j3i_kpWtuGecKVORQhPi7c'
+# "variable" <- 'website address for data'
+url <- 'https://docs.google.com/spreadsheets/d/1mTQPw3GsqID_ay6YqdNISOOKIMb9HHeBpFu7EWFiGj8'
 
-#load the data from google sheets
-# "variable" <- "command to work on" (data from last line)
+#load the data from google sheets and store it as the variable diversitydata
+# "variable" <- "command to work on"(variable from last line)
 diversitydata <- gsheet2tbl(url)
 ```
 
 **Use the # symbol to add comments to your script as you enter the commands below**
 
+<br>
+
+<br>
+
+**SAVE your work**. Save your code by clicking `File > Save`.
+
+**Name your file Lab1_YourName.R.** 
+Remember to put ".R" at the end! Your work will save to the server that we are using for this lab. You will be able to access your work on this server from other computers, as long as you know the web address, your username and password.
+
+
+![](savescript.png) 
+
+##### Page Break
+
+
 ## 4. Plot your data
 
-To compare the diversity values among site types we need to plot the values for each site type.
-
-### 4a. Load the library that allows us to create plots
+### 4a. Load the plotting library
 
 ```{r loadlibrary}
+# Load the package that allows us to plot data
+
 library(ggplot2)
 ```
 
+Make sure you click Run after typing in each line of code.
+
+<br>
+
 ### 4b. Create the base layer of your plot 
 
-* use the command `ggplot`
-    + enter the name of the variable containing your data
-    + `aes` specifies the "aesthetics" of the plot (i.e. how it looks), including the x and y variables
-    + specify the variable names based on viewing the data
-* run this plot command
+Use the command `ggplot`:
 
-```{r }
-ggplot(diversitydata, aes(x=Tide,y=Diversity))
+*	`diversitydata` is the name of the variable containing your data
+*	`aes` tells `ggplot` what the plot will look like ("aesthetics") including the x and y variables
+*	`SiteType` is the column name from the data table describing the site locations and is the column of data you want to plot on the x-axis.
+*	`Diversity` is the column name from the data table listing the Simpson Diversity index values and is the name of the column of data you want to plot on the y-axis.
+
+<br>
+
+Run this ggplot command. 
+
+The graph will show up in the Graphical Output window (bottom right).
+
+<br>
+
+```{r makeplot, fig.height=3, fig.width=5}
+# Create a plot
+
+ggplot(diversitydata, aes(x=SiteType,y=Diversity))
 ```
 
-**SAVE your work**. Save your code by clicking `File > Save`. **Name your file Lab1_YourName.rproj.** Your work will save to the server that we are using for this lab.  You will be able to access your work on this server from other computers, as long as you know the web address and your username and password.
+
+##### Page Break
 
 
 ### 4c. Add data points to your plot
 
-* now that you have set up your plot add your points using `geom_point()`
-* put a `+` between the `ggplot` command and `geom_point()`
+Use the `geom_point()` command to add points to your plot.
 
-```{r }
-#insert comment here
-ggplot(diversitydata, aes(x=Tide,y=Diversity))+
-  geom_point()
+*	Put a `+` between the `ggplot` command and `geom_point()`
+
+<br>
+
+```{r points, fig.height=3, fig.width=5}
+# Add points to the plot using geom_point()
+
+ggplot(diversitydata, aes(x=SiteType,y=Diversity)) + geom_point()
 ```
 
-**Add real comments to your script**
+
+<br>
+
 
 ### 4d. Add a boxplot on top of your plot
 
-* a boxplot summarizes your data by plotting 
-    + the median (middle) value as a horizontal line
-    + the middle half of the data as a box
-    + the remaining top and bottom quarters of the data as lines above and below the box
-  
-* add a boxplot using `geom_boxplot()`
-* put a `+` between the `geom_point()` command and `geom_boxplot()`
-* note the `+` must come at the end of a line or the command will terminate and not plot another layer
+* A boxplot summarizes your data by plotting:
 
-```{r }
-#insert comment here
-ggplot(diversitydata, aes(x=Tide,y=Diversity))+
+    + the median (middle) value as a horizontal line
+    + 50% of the data within the box
+    + the remaining top and bottom  25% of the data as lines above and below the box. A boxplot based on the numbers 1, 2, 3, 4, 4 and 5 would have the median line located at 3.5 (the median), the upper part of the box at 4 and the lower part of the box at 3.
+
+
+* **The greater the range of the boxplot, the greater the variation of your data!**
+  
+* Add a boxplot using the `geom_boxplot()` command
+* Put a `+` between the `geom_point()` command and `geom_boxplot()`
+* The `+` must come at the end of a line or the command will end and not plot the layer
+
+##### Page Break
+
+
+```{r plotbox}
+# Add boxplots to the plot using geom_boxplot()
+
+ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_point()+
   geom_boxplot()
 ```
 
-**Adjust comments as needed**
+<br>
 
-* in order to see both the box and the points plot the box first then the point layer on top
-  + note: the order of the plotting instructions specifies how the plot is made - i.e. first the base, then the points, then the box covering the points
-* plot just the boxplot as this is the typical way to visualize the data
+<br>
+
+**Remember to add descriptive comments to your script!**
+
+Note: the order of the plotting instructions tells **R** to make:
+
+1.	The base plot
+2.	The data points
+3.	The boxplots on top of the data points
+
+
+##### Page Break
+
 
 
 ## 5. Edit your boxplots
 
-### 5a. Reorder data on the X-axis
 
-In some cases you might want to have your data in a particular order.
+### 5a. Add axis labels to your plot
 
-* plot outgoing on the left and incoming on the right side of the plot
-* `scale_x_discrete` allows you to change all the information on the x axis
-  + limits specifies the range of data on the x axis - since the data are categorical not continuous (e.g. from 1-10) you put the items in a list
+The variable `Diversity` is an integer (a numerical value), which means it is on a continuous scale; thus, the function to label your y axis is continuous (`scale_y_continuous`). Other examples of continuous variables are time, weight, or date since they are numerical integers. We use a discrete scale when plotting variables like `Location` or `Tide` or `Color`, where each variable is its own category (`scale_x_discrete`).
 
-```{r }
-#insert comment here
-ggplot(diversitydata, aes(x=Tide,y=Diversity))+
-  geom_point()+
+* Use the `scale_x_discrete()` function and the `name =` function to label your x-axis "Conditions at site". 
+
+<br>
+
+```{r xlabel}
+# Plot just the boxplots and change the x-axis label
+
+ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_boxplot()+
-  scale_x_discrete(limits=c("outgoing", "incoming"))
+  scale_x_discrete(name ="Conditions at site")
 ```
 
 
-### 5b. Add labels to your plot
+##### Page Break
 
-* use `scale_x_discrete` to relabel the category names to something more descriptive and to specify the overall x axis name
 
-```{r }
-ggplot(diversitydata, aes(x=Tide,y=Diversity))+
+* Use the `scale_y_continuous()` function to label your y-axis correctly.
+
+<br>
+
+```{r ylabel}
+# Plot just the boxplots and change the x-axis and y-axis labels
+
+ggplot(diversitydata, aes(x=SiteType,y=Diversity))+
   geom_boxplot()+
-  scale_x_discrete(limits=c("outgoing", "incoming"), 
-                   labels=c("outgoing" = "Outgoing Tide",
-                            "incoming" = "Incoming Tide"), 
-                   name ="Tide at site")
-
+  scale_x_discrete(name ="Conditions at site") +
+  scale_y_continuous(name="Simpson Diversity Index")
 ```
 
-### 5c. Save your boxplot as an image
+<br>
 
-* Click on Plots > Save as Image...
-* Name your file and click save.
+### 5b. Save your boxplot as an image
+
+* Click on Plots > Export > Save as Image...
+* Name your file (Lab1_Boxplot1) and click Save.
+* To view your saved images, go to File > Open Files, then click on the image you want. Open the image to copy/paste it into your lab report (written in Word or GoogleDocs).
 
 
-### 5d. Look at a subset of data
+##### Page Break
 
-If you want to show only data from the Regular Sampling Site (RSS), then make a new variable (here called 'RSS') containing these data
 
-* First load the `dplyr` library to provide a method of filtering the data.
+
+### 5c. Look at a subset of data
+
+If you want to only show data from the two FOX Island sites, then make a new variable containing just these data by filtering your larger dataset.
+
+First load the `dplyr` library, which contains a filtering function.
 
 ```{r, warning=FALSE,message=FALSE }
+# Load the dplyr library
+
 library(dplyr)
 ```
 
-* Then `filter` the data where the value in the Location column is RSS
+<br>
 
-```{r }
-RSS <- filter(diversitydata,Location=="RSS")
+Then `filter` the data to include SiteTypes FOX_outgoing and FOX_incoming (the vertical bar means "and")
+
+```{r filter, warning=FALSE,message=FALSE}
+# Create a new variable named FOXonly with just the FOX_incoming and FOX_outgoing data
+
+FOXonly <- filter(diversitydata,SiteType=="FOX_incoming" | SiteType=="FOX_outgoing")
 ```
 
-* Now plot this new dataset
+<br>
 
-```{r }
-ggplot(RSS, aes(x=Tide, y=Diversity)) +
+Now plot this new dataset using boxplots.
+
+```{r , fig.height=3, fig.width=5}
+# Plot the FOXonly data with boxplots and changed axis labels
+
+ggplot(FOXonly, aes(x=SiteType, y=Diversity)) +
   geom_boxplot()+
-  scale_x_discrete(limits=c("outgoing", "incoming"), 
-                   labels=c("outgoing" = "Outgoing Tide",
-                            "incoming" = "Incoming Tide"), 
-                   name ="Tide at site")
+  scale_x_discrete(name ="Conditions at site")+
+  scale_y_continuous(name="Simpson Diversity Index")
 ```
 
-**Turn in this final boxplot of the data.**
-**Turn in your diversity summary table.**
+**Turn in this final boxplot of the data in your lab report.**
+
+**(Plots > Export > Save as Image... > Name your file)**
+
+##### Page Break
 
 ## 6. Homework Assignment
 
-The samples you worked with are part of one of the world's longest datasets of regularly collected plankton. In class you examined diversity of just two samples in January 2018. Even though many groups calculated the diversity of this sample, each count really only represents one estimate of the value for this sample. To examine diversity accurately you will use samples from Narragansett Bay collected in December and January going back to 1999.
+### Part 1. Graphing incoming vs. outgoing diversity at the GSO sites
 
-* Make a boxplot comparing diversity during incoming and outgoing tides in December and January.
-* Data are available at https://docs.google.com/spreadsheets/d/1bKWol4lJ_XrMIK3TqHcYvknel2mHsmuI8Qk5-sRPxbM
-* Create a new R script
-* Load the libraries
-* Load your data
-* Make a boxplot similar to the Diversity index plot you made in class
-* Select one location and make a Diversity index boxplot for just that location.
+1. Subset your diversity data for just the GSO sites. Make a boxplot like you did in Step 5d.
+Hint: create a new variable named `GSOonly`
+2. Turn in your boxplots from both sites.
+3. Write a summary to compare the incoming and outgoing sites at both locations. Which has a higher diversity? Please explain why one tide may have a higher diversity index value than the other. (2-3 sentences)
+4. Which has a greater amount of variation in the data? How can you tell?
+5. Include your summary table of your data formatted according to the lecture and poster in the BIO 104 lab.
 
-**Write a two sentence statement describing the difference in diversity between tides**
+### Part 2. Graphing Long-Term Plankton Data
+
+The samples you worked with in class are part of one of the world's oldest datasets of regularly collected plankton samples. These samples have been collected weekly since 1999 at the Fox Island Station in Narragansett Bay, near Wickford. More information on this weekly plankton survery can be found at https://web.uri.edu/plankton/data/.
+
+In class, you calculated the diversity values of two of these samples from January 2018 at the Fox Island Station, in addition to the two samples collected from the GSO location. Even though many groups in your class calculated the diversity values of these two samples, each calculated diversity value represents one estimate for these two samples. To more thoroughly and accurately examine plankton diversity at the Fox Island station, you will analyze diversity data from this long-term dataset collected every week since 1999.
+
+1. Make a boxplot comparing plankton diversity during incoming and outgoing tides at the Fox Island Site from all months in the long-term dataset, like you did in Step 4 (Hint: `x=Tide`).
+2. Data are available at  https://docs.google.com/spreadsheets/d/1RdEzJqLi1vRcpR80nH__0n7nJJ8gPZxoxxuHQqvtbWs/
+3. Start with the commands: 
+```{r newdataload, warning=FALSE,message=FALSE}
+url2 <-'https://docs.google.com/spreadsheets/d/ 1RdEzJqLi1vRcpR80nH__0n7nJJ8gPZxoxxuHQqvtbWs/'
+FOXyearlydiversitydata <- gsheet2tbl(url2)
+```
+
+4. Select three months and make a diversity index boxplot comparing just those 3 months, like you did in Step 5d and Homework Part 1. Hint: create a new variable named `threemonthsonly` and plot using `x=Month`
+
+6. Write a summary describing differences in diversity between tides and months at the Fox Island site (2-3 sentences). Make sure to discuss which of the months that you chose had the most variation (boxplot range) in diversity and highest median diversity value.
+
+##### Page Break
+
+## Lab 1 Report Submission
+
+**Part 1. Done in Lab**
+
+1. Individual Summary Table of your class' data
+2. Boxplot of FOX Island diversity data (created in Step 5d)
+3. Boxplot of GSO diversity data (Homework Part 1)
+4. Summary of diversity differences (2-3 sentences)
+
+<br>
+
+**Part 2. Homework**
+
+1. Boxplot of all FOX Island long-term diversity data by tide
+2. Boxplot of FOX Island long-term diversity data for 3 years
+3. Summary of diversity differences in the three months you selected (2-3 sentences)
+
+<br>
+
+<br>
+
+Examine the poster on the wall in class and the Powerpoint from today's lab to properly format your tables and graphs!
