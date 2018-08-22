@@ -1,15 +1,17 @@
 ---
-title: 'BIO104 Lab A4: Plant Differentiation and Growth'
+title: 'BIO104 Lab A4. Plant Differentiation and Growth'
 output:
-  word_document: default
+  word_document:
+              reference_docx: mystyles.docx
   pdf_document: default
   html_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=3)
+knitr::opts_chunk$set(echo = TRUE, fig.width=5, fig.height=3)
 ```
 
+<br>
 
 ## Goals for Lab 4
 
@@ -21,6 +23,7 @@ Be able to...
 * Represent variation in data on graphs
 * Compare two treatments statistically, where the data varies among individuals
 
+<br>
 
 ## 1. Getting Started
 
@@ -28,7 +31,9 @@ Be able to...
 
 Calculate the average height of your group's light and dark seedlings at each interval (2 days, 4 days, and 6 days) using Google Sheets. You should have 6 values total. Put your group's data into a Google Sheet in _*long form*_. Set it up with the column names `exposure` (light or dark), `day` (2,4,6), and `height` (what you measured).
 
-By calculating the average of the 6 seedlings you meassured, you are getting a good estimate of your group's sample. Each of the seedlings you measured are called pseudoreplicates, while the means for each of your seedling groups are called a true replicate. Calculating a single estimate from multiple plants minimizes the error in your estimate of the height of your seedlings (i.e. measurement error). However, it means you only have one height estimate per treatment/day.
+By calculating the average of the 6 seedlings you meassured, you are getting a good estimate of your group's sample. Each of the seedlings you measured are called pseudoreplicates, while the means for each of your seedling groups are called a true replicate. Calculating a single estimate from multiple plants minimizes the error in your estimate of the seedling heights (i.e. measurement error). However, it means you only have one height estimate per treatment/day.
+
+<br>
 
 
 ### 1b. Put class data in long form on Google Sheets
@@ -37,13 +42,20 @@ Go to the Lab Sakai Site and scroll down like you did in Labs 1 and 2. Select th
 
 Now you have good estimates of multiple samples to work with. There will be some variation among samples due to the soil, the location the plants were grown, and how different people measured height. Having multiple samples allows you to estimate a mean height despite all this variation.
 
+##### Page Break
+
+
 
 ### 1c. Load the packages you need
   
-**Make a new project in a new directory and open a new script.** _Refer to Lab A1, Part 2 if you need help._
+**Make a new project in a new directory and open a new script.** 
+
+_Refer to Lab A1, Part 2 if you need help._
   
 * Copy the comment lines into your script
 * Enter the code based on the previous labs and your R scripts from Labs A1 and A2.
+
+<br>
 
 ```{r loadlib}
 # Load the packages ggplot2, gsheet, and dplyr
@@ -56,27 +68,28 @@ library(gsheet)
 library(dplyr)
 ```
 
+<br>
+
 ## 2. Get your data into R
 
 
 ```{r loaddata}
 # Store the Google sheets link as the variable url
 
-```
-
-```{r load4, echo=FALSE}
-url <- 'https://docs.google.com/spreadsheets/d/1MOkh3SNsuuTixjRFi4ptYmjimUJ9rGXIta1iJDjre9k'
-```
-
-```{r }
 # Load the data stored in the variable url using the gsheet2tbl function
 # and store it as the variable plant_data
 
 ```
 
+```{r load4, echo=FALSE}
+url <- 'https://docs.google.com/spreadsheets/d/1UxrniZwOFXDrNYOAqA6dmSCSpPp3lNWn_zw1MG8NVxQ/edit#gid=0'
+```
+
 ```{r load5, echo=FALSE}
 plant_data <- gsheet2tbl(url)
 ```
+
+<br>
 
 Remember, once we have our data in, it is always good to check to make sure the data was imported correctly. 
 _Use the commands you learned in Lab A2, Part 2._
@@ -91,17 +104,21 @@ head(plant_data)
 colnames(plant_data)
 ```
 
+<br>
+
+<br>
 
 ## 3. Graphing the Seedling Data
 
-Because we want to compare the seedlings grown under light and dark conditions, you are going to graph both sets of data together. You will first graph the individual data as points. This way you can see how much variation is in your data.
+Because we want to compare the seedlings grown under light and dark conditions, you are going to graph both sets of data together. First, you will first graph the individual data as points to see how much variation is in your data.
 
 ### 3a. Create the base layer of your plot
 
 * What is the independent variable (x axis)?
 * What is the dependent variable (y axis)?
-* How will you plot light and dark conditions separately?
-_Refer to Lab A2, Part 4b if you need help._
+* How will you plot light and dark conditions separately? _Refer to Lab A2, Part 4b if you need help._
+
+<br>
 
 ```{r head3, eval=FALSE}
 # Create the base layer of your plant_data plot using ggplot
@@ -113,10 +130,15 @@ ggplot(plant_data, aes(x=day, y=height, color=exposure))
 ```
 
 
+##### Page Break
+
+
 ### 3b. Add the data and labels to the plot
 
 * Note: the variable `day` is an integer, which means it is on a continuous scale rather than in discrete categories; thus, the functions to label your axes are *continuous* (`scale_x_continuous`, not `scale_x_discrete`). We use a discrete scale when plotting variables like `SiteType` or `Color`, where each variable is its own category.
 _Refer to Lab A1, Part 5b if you need help._
+
+<br>
 
 ```{r head4, eval=FALSE}
 # Add datapoints and labels to the plot using geom_point
@@ -126,14 +148,20 @@ _Refer to Lab A1, Part 5b if you need help._
 ```{r plot1b, echo=FALSE, warning=FALSE, fig.show = 'hide'}
 ggplot(plant_data, aes(x=day, y=height, color=exposure))+
   geom_point()+
-  scale_x_continuous(name="Day") + scale_y_continuous(name="Mean Height (mm)") + labs(color="Exposure")
+  scale_x_continuous(name="Day") + scale_y_continuous(name="Mean Height (mm)") + labs(color="Plant Type")
+
 ```
 **Save this plot as Lab4_graph1 so that you can turn it in with your lab report.**
+
+<br>
 
 Does it look like there might be a difference between the two groups?
 
 Based on just this plot, what can you say about the differences? How confident do you feel?
 
+<br>
+
+<br>
 
 
 ## 4. Compare the Height of Seedlings in Different Conditions
@@ -141,6 +169,8 @@ Based on just this plot, what can you say about the differences? How confident d
 We are interested in comparing the growth rates of seedlings in light and dark conditions. To make these comparisons we need to know the mean of each group of exposure data and how much variation there is within each group.
 
 * Group the data by exposure and day. _Refer to Lab A2, Part 3 if you need help._
+
+<br>
 
 ```{r gb1}
 # Group the plant_data variable by exposure and day using the group_by function
@@ -152,9 +182,13 @@ We are interested in comparing the growth rates of seedlings in light and dark c
 grouped_plant_data <- group_by(plant_data, exposure, day)
 ```
 
+<br>
+
 Calculate the mean `height` of each group. _Refer to Lab A2, Part 3 if you need help._
 
 * Add `na.rm=TRUE` into the `mean()` function. This additional code tells R to ignore areas in the data set that had no values entered. For example, if no seedlings grew under your dark condition, you would not record any data under height for that experiment. By using this code, R can now ignore these blank spaces and calculate the mean correctly. 
+
+<br>
 
 ```{r gb2}
 # Calculate the mean height of the seedlings at each interval using the summarise function
@@ -174,9 +208,14 @@ head(plant_data_means)
 
 ```
 
+
+##### Page Break
+
 ## 5. Graphing the Mean Seedling Data
 
 Because we want to compare the seedlings grown under light and dark conditions, we are going to graph both sets of data together. 
+
+<br>
 
 ### 5a. Create the base layer of your plot and add points
 
@@ -184,6 +223,8 @@ Because we want to compare the seedlings grown under light and dark conditions, 
 * What is the dependent variable (y axis)?
 * How will you plot light and dark conditions separately?
 _Refer to Lab A2, Part 4b if you need help._
+
+<br>
 
 ```{r head35, eval=FALSE}
 # Make your plot for the plant_data_means data using the ggplot command
@@ -195,6 +236,10 @@ ggplot(plant_data_means, aes(x=day, y=mean, color=exposure))+
   geom_point()
 ```
 
+<br>
+
+<br>
+
 ### 5b. Calculate the standard deviation of the means
 
 It appears that there are differences in seedling heights between the two different growing conditions. However, if there is a lot of variation in our data those differences may not be statistically significant. We can check if the light and dark grown seedlings are statistically significantly different using a t-test. 
@@ -202,6 +247,8 @@ It appears that there are differences in seedling heights between the two differ
 * The *standard deviation* is how much the individual data points differ from the overall mean on average. Using the standard deviation gives a single value on how much variation there is in the data. For example, if we saw seedling heights of 3, 2.9, 3, and 3.1, we would have a small standard deviation. However, if we had seedling heights of 0.5, 5.5, 2, and 4, the standard deviation would be high. 
 
 * Standard deviation is calculated in R using the function `sd`.
+
+<br>
 
 ```{r sm2}
 # Remake your table of means so it includes std deviation
@@ -213,15 +260,21 @@ plant_data_means <- summarise(grouped_plant_data,
 ```
 
 
+##### Page Break
+
+
+
 ### 5c. Add standard deviation bars to your plot
 
-Next add the standard deviation bars to your graphs by adding a layer using `geom_errorbar`
+Next add the standard deviation bars to your graphs by adding a layer using `geom_errorbar()`
 
-* `geom_errorbar` draws an error bar that has an upper and lower value. In this case, the upper value is the mean + the standard deviation and the lower value is the mean - the standard deviation. 
+* `geom_errorbar()` draws an error bar that has an upper and lower value. In this case, the upper value is the mean + the standard deviation and the lower value is the mean - the standard deviation. 
 * Add ` + geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))` to your ggplot command.
 
+<br>
+
 ```{r sd, eval=FALSE}
-# Add the error bars to the plot using geom_errorbar
+# Add the error bars to the plot using geom_errorbar()
 
 ```
 
@@ -231,11 +284,15 @@ ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
   geom_errorbar(aes(ymin=mean+stdev, ymax=mean-stdev))
 ```
 
+<br>
+
 ### 5d. Add labels to your plot
 Just like last class, you'll want to clean up your graph and make it look professional.
 
 * Add labels to the axes and legend
 * Change the width of the error bars by adding `width = 0.2` after `ymax` in `geom_errorbar`. 
+
+<br>
 
 ```{r}
 # Label your plot and change axes titles
@@ -252,16 +309,20 @@ ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
 ```
 
 
+<br>
+
 ### 5e. Draw lines representing a trend that fits your data
 
 This model is a linear (straight) best fit line. It is referred to as a regression. 
 
-* Add the model lines to your graph by adding a layer using `geom_smooth`. 
+* Add the model lines to your graph by adding a layer using `geom_smooth()`. 
 * There are two lines: one for each subset of data.
 * Add ` + geom_smooth(method="lm", se = FALSE)` to your ggplot command.
 
+<br>
+
 ```{r sd1, eval=FALSE}
-# Add the regression to your plot using geom_smooth
+# Add the regression to your plot using geom_smooth()
 
 ```
 
@@ -274,11 +335,14 @@ ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
   geom_smooth(method="lm", se = FALSE)
 ```
 
+<br>
+
 **Save this plot as Lab4_graph2 so that you can turn it in with your lab report.**
 
 * Under which condition did the seedlings grow better? Light or dark?
 * How confident do you feel? More or less than when you plotted all the data?
 
+##### Page Break
 
 
 
@@ -286,11 +350,15 @@ ggplot(plant_data_means, aes(x=day, y=mean,color=exposure))+
 
 Just like in Lab A2, we have two groups of data we want to compare to see if there is a statistical difference. In this case, we're interested in whether there is a difference between seedling heights in the 6 day old seedlings.
 
+<br>
+
 * Filter light and dark grown seedlings for the day 6 time period. _Refer to Lab A2. Part 6 for help._
  
 ```{r comm, eval=FALSE}
  # Subset plant data by exposure and growth time
  # and store as the variables light6days and dark6days
+
+ # Remember to put quote around "light" and "dark"
 
 ```
  
@@ -300,6 +368,8 @@ Just like in Lab A2, we have two groups of data we want to compare to see if the
  Dark6Day <- filter(plant_data, exposure=="dark" & day=="6")
 ```
  
+<br>
+
  * What is your null hypothesis for the 6 day old seedling data?
  
 ```{r ttes, eval=FALSE}
@@ -312,6 +382,10 @@ t.test(Light6Day$height, Dark6Day$height)
 
 Under which condition did the seedlings grow better? Light or dark?
 
+<br>
+
+<br>
+
 ## Lab 4 Report Submission
 
 Turn in a hard copy of your lab report that includes the following:
@@ -322,11 +396,13 @@ Turn in a hard copy of your lab report that includes the following:
 4. Your code. Code should be organized, include good comments, and include only code that works and does not produce errors.
 5. Answers to the following questions (one full page, double-spaced):
 
-  * Under which condition did the seedlings grow better? Light or dark?
-  * Describe the variance you see in the mean data. How is this reflected in the error bars?
-  * How does your best fit line (regression) fit the mean data? Does it help show the overall trend?
-  * What is your null hypothesis for the 6 day old seedling data?
-  * Explain why you rejected or failed to reject your null hypothesis based on your t-test results and explain the processes that may have influenced the experiment.
+    * Under which condition did the seedlings grow better? Light or dark?
+    * Describe the variance you see in the mean data. How is this reflected in the error bars?
+    * How does your best fit line (regression) fit the mean data? Does it help show the overall trend?
+    * What is your null hypothesis for the 6 day old seedling data?
+    * Explain why you rejected or failed to reject your null hypothesis based on your t-test results and explain the processes that may have influenced the experiment.
+
+##### Page Break
 
 
 ## More material to help you understand mean and standard deviation
